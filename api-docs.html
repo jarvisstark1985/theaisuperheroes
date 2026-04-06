@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume SuperHero API Documentation | The AI Superheroes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+        .bg-navy { background-color: #0a0e27; }
+        .text-navy { color: #0a0e27; }
+        .bg-blue { background-color: #00d4ff; }
+        .text-blue { color: #00d4ff; }
+        .bg-purple { background-color: #8b5cf6; }
+        .text-purple { color: #8b5cf6; }
+        .bg-gold { background-color: #fbbf24; }
+        .text-gold { color: #fbbf24; }
+        .border-blue { border-color: #00d4ff; }
+        .border-purple { border-color: #8b5cf6; }
+        .hover-blue:hover { color: #00d4ff; }
+        .code-block {
+            background-color: #1a1f3a;
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        .code-block code {
+            color: #00d4ff;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        .endpoint-card {
+            border: 1px solid #8b5cf6;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .badge-method {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        .badge-post { background-color: rgba(139, 92, 246, 0.3); color: #d8b4fe; }
+        .badge-get { background-color: rgba(0, 212, 255, 0.3); color: #a5f3fc; }
+        .nav-link {
+            color: #a0aec0;
+            transition: color 0.3s;
+        }
+        .nav-link.active { color: #00d4ff; }
+        .nav-link:hover { color: #00d4ff; }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0), rgba(0, 212, 255, 0.5), rgba(139, 92, 246, 0));
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table thead {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+        table td, table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        .required-label {
+            color: #fca5a5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-navy text-white">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-navy bg-opacity-95 backdrop-blur border-b border-purple border-opacity-20">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-8">
+                <a href="index.html" class="text-xl font-bold">
+                    <span class="text-gold">The AI</span><span class="text-blue">Superheroes</span>
+                </a>
+                <div class="hidden md:flex gap-8">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="#" class="nav-link active">API Docs</a>
+                    <a href="#" class="nav-link">Products</a>
+                </div>
+            </div>
+            <a href="#getting-started" class="bg-purple hover:bg-opacity-80 px-6 py-2 rounded font-semibold transition">Get API Key</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-b from-navy via-[#0d1238] to-navy pt-20 pb-12 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                Resume SuperHero <span class="text-blue">API</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Give your AI agent the power to build ATS-optimized resumes, search jobs, and automate applications
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quick-start" class="bg-blue text-navy font-bold px-8 py-3 rounded hover:bg-opacity-90 transition">
+                    Quick Start
+                </a>
+                <a href="#endpoints" class="border-2 border-purple text-purple font-bold px-8 py-3 rounded hover:bg-purple hover:bg-opacity-10 transition">
+                    View Endpoints
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="bg-navy px-6 py-12">
+        <div class="max-w-6xl mx-auto">
+            <!-- Authentication Section -->
+            <section id="auth" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Authentication</h2>
+                <div class="endpoint-card">
+                    <p class="text-gray-300 mb-4">All API requests require authentication using an API key. Include your API key in the request header:</p>
+                    <div class="code-block">
+                        <code>X-API-Key: your_api_key_here</code>
+                    </div>
+                    <p class="text-gray-300 mt-4">Get your free API key at <a href="#" class="text-blue hover:underline">theaisuperheroes.com/api/keys</a></p>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Quick Start Section -->
+            <section id="quick-start" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Quick Start</h2>
+                <div class="space-y-6">
+                    <div class="bg-opacity-10 bg-purple rounded-lg p-6 border border-purple border-opacity-30">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl font-bold text-purple">1</span>
+                            <h3 class="text-xl font-semibold">Get Your API Key</h3>
+                        </div>
+                        <p class="text-gray-300">Sign up for free and generate your API key from your dashboard. Free tier includes 100 calls/month.</p>
+                    </div>
+                    <div class="bg-opacity-10 bg-purple rounded-lg p-6 border border-purple border-opacity-30">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl font-bold text-purple">2</span>
+                            <h3 class="text-xl font-semibold">Make Your First Call</h3>
+                        </div>
+                        <p class="text-gray-300 mb-4">Use curl, Python, or JavaScript to call any endpoint:</p>
+                        <div class="code-block">
+                            <code>curl -X POST https://api.theaisuperheroes.com/v1/search-jobs \
+  -H "X-API-Key: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Python Developer",
+    "location": "remote"
+  }'</code>
+                        </div>
+                    </div>
+                    <div class="bg-opacity-10 bg-purple rounded-lg p-6 border border-purple border-opacity-30">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl font-bold text-purple">3</span>
+                            <h3 class="text-xl font-semibold">Deploy to Production</h3>
+                        </div>
+                        <p class="text-gray-300">Integrate into your AI agent and start building resumes. See code examples below.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Endpoints Section -->
+            <section id="endpoints" class="mb-16">
+                <h2 class="text-3xl font-bold mb-8 text-gold">API Endpoints</h2>
+
+                <!-- build_resume -->
+                <div class="endpoint-card mb-8">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge-method badge-post">POST</span>
+                                <code class="text-blue">/build-resume</code>
+                            </div>
+                            <h3 class="text-2xl font-bold">Generate ATS-Optimized Resume</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold font-bold">$0.50</p>
+                            <p class="text-gray-400 text-sm">per call</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Generate a professionally formatted, ATS-optimized resume from user experience data. Automatically matches keywords from job descriptions.</p>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Parameters</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-blue">user_name</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Full name of the user</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">email</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Email address for contact</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">target_role</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Target job title</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">job_description</span></td>
+                                    <td>string</td>
+                                    <td>Job posting text to optimize against</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">experience</span></td>
+                                    <td>array</td>
+                                    <td>Array of work experience entries</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">education</span></td>
+                                    <td>array</td>
+                                    <td>Array of education entries</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">skills</span></td>
+                                    <td>array</td>
+                                    <td>List of technical and professional skills</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Example Request</h4>
+                        <div class="code-block">
+                            <code>POST /v1/build-resume
+
+{
+  "user_name": "Sarah Johnson",
+  "email": "sarah@example.com",
+  "phone": "+1-555-0100",
+  "target_role": "Senior Product Manager",
+  "job_description": "We're hiring a Senior PM with 5+ years experience...",
+  "experience": [
+    {
+      "company": "Tech Corp",
+      "title": "Product Manager",
+      "start_date": "2021-01",
+      "end_date": "Present",
+      "bullets": [
+        "Led product strategy resulting in 40% revenue growth",
+        "Managed cross-functional team of 8 engineers and designers",
+        "Launched 3 major features impacting 500k+ users"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "Stanford University",
+      "degree": "BS",
+      "field": "Computer Science",
+      "year": "2018"
+    }
+  ],
+  "skills": ["Product Management", "Agile", "Analytics", "User Research"]
+}</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-purple mb-3">Example Response</h4>
+                        <div class="code-block">
+                            <code>{
+  "resume_url": "https://cdn.theaisuperheroes.com/resumes/sarah-johnson-2026.pdf",
+  "ats_score": 94,
+  "keyword_match_percentage": 87,
+  "suggestions": [
+    "Add quantified metrics to bullets 2-3",
+    "Include 'Agile' and 'JIRA' in skills section",
+    "Highlight budget management experience"
+  ],
+  "estimated_interviews": 25
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- search_jobs -->
+                <div class="endpoint-card mb-8">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge-method badge-get">GET</span>
+                                <code class="text-blue">/search-jobs</code>
+                            </div>
+                            <h3 class="text-2xl font-bold">Search Job Listings</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold font-bold">$0.05</p>
+                            <p class="text-gray-400 text-sm">per call</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Search real job listings from Indeed, LinkedIn, and other job boards. Filter by location, salary, experience level, and more.</p>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Parameters</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-blue">query</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Job title or keyword</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">location</span></td>
+                                    <td>string</td>
+                                    <td>City/State or 'remote' (default: remote)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">job_type</span></td>
+                                    <td>enum</td>
+                                    <td>fulltime, parttime, contract, internship</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">salary_min</span></td>
+                                    <td>number</td>
+                                    <td>Minimum annual salary in USD</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">max_results</span></td>
+                                    <td>number</td>
+                                    <td>Number of results to return (1-50, default: 10)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Example Request</h4>
+                        <div class="code-block">
+                            <code>GET /v1/search-jobs?query=Python+Developer&location=remote&job_type=fulltime&salary_min=120000&max_results=20</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-purple mb-3">Example Response</h4>
+                        <div class="code-block">
+                            <code>{
+  "jobs": [
+    {
+      "job_id": "indeed_job_abc123",
+      "title": "Senior Python Developer",
+      "company": "Acme Tech Inc",
+      "location": "Remote",
+      "salary": "$150,000 - $180,000",
+      "job_type": "fulltime",
+      "description_snippet": "We're looking for an experienced Python developer...",
+      "apply_url": "https://indeed.com/jobs?q=123",
+      "posted_date": "2026-04-04T12:00:00Z",
+      "match_score": 98
+    }
+  ],
+  "total_results": 342,
+  "search_time_ms": 245
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- auto_apply -->
+                <div class="endpoint-card mb-8">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge-method badge-post">POST</span>
+                                <code class="text-blue">/auto-apply</code>
+                            </div>
+                            <h3 class="text-2xl font-bold">Submit Job Application</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold font-bold">$0.25</p>
+                            <p class="text-gray-400 text-sm">per call</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Automatically submit a resume to a specific job listing. Handles cover letters, screening questions, and application tracking.</p>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Parameters</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-blue">job_id</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Job ID from search results</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">resume_url</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> URL to resume PDF</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">user_email</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Applicant email</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">auto_generate_cover_letter</span></td>
+                                    <td>boolean</td>
+                                    <td>Auto-generate personalized cover letter (default: true)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Example Request</h4>
+                        <div class="code-block">
+                            <code>POST /v1/auto-apply
+
+{
+  "job_id": "indeed_job_abc123",
+  "resume_url": "https://cdn.theaisuperheroes.com/resumes/sarah-johnson.pdf",
+  "user_email": "sarah@example.com",
+  "auto_generate_cover_letter": true
+}</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-purple mb-3">Example Response</h4>
+                        <div class="code-block">
+                            <code>{
+  "status": "submitted",
+  "confirmation_id": "app_xyz789",
+  "company": "Acme Tech Inc",
+  "job_title": "Senior Python Developer",
+  "applied_at": "2026-04-06T14:32:00Z",
+  "tracking_url": "https://theaisuperheroes.com/apps/app_xyz789",
+  "next_steps": "Company typically responds within 3-5 business days"
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- salary_research -->
+                <div class="endpoint-card mb-8">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge-method badge-get">GET</span>
+                                <code class="text-blue">/salary-research</code>
+                            </div>
+                            <h3 class="text-2xl font-bold">Get Salary Data</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold font-bold">$0.02</p>
+                            <p class="text-gray-400 text-sm">per call</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Get comprehensive salary benchmarks, bonus ranges, and compensation data for any role and experience level.</p>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Parameters</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-blue">job_title</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Job title to research</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">experience_level</span></td>
+                                    <td>enum</td>
+                                    <td>entry, mid, senior, lead, director, vp, executive</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">location</span></td>
+                                    <td>string</td>
+                                    <td>City/State or Country (default: US)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">industry</span></td>
+                                    <td>string</td>
+                                    <td>Industry or vertical</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Example Request</h4>
+                        <div class="code-block">
+                            <code>GET /v1/salary-research?job_title=Senior+Product+Manager&experience_level=senior&location=San+Francisco</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-purple mb-3">Example Response</h4>
+                        <div class="code-block">
+                            <code>{
+  "job_title": "Senior Product Manager",
+  "median_salary": 185000,
+  "salary_low": 155000,
+  "salary_high": 225000,
+  "bonus_median": 15,
+  "bonus_range": "10-25%",
+  "equity_common": true,
+  "total_compensation_median": 213000,
+  "benefits_highlights": [
+    "Health/Dental/Vision",
+    "401(k) matching",
+    "Stock options",
+    "Remote work"
+  ],
+  "data_samples": 1247,
+  "last_updated": "2026-04-06T00:00:00Z"
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- optimize_linkedin -->
+                <div class="endpoint-card mb-8">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="badge-method badge-post">POST</span>
+                                <code class="text-blue">/optimize-linkedin</code>
+                            </div>
+                            <h3 class="text-2xl font-bold">Optimize LinkedIn Profile</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold font-bold">$0.25</p>
+                            <p class="text-gray-400 text-sm">per call</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Generate optimized LinkedIn headline, summary, and experience bullets to increase recruiter visibility and engagement.</p>
+
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-purple mb-3">Parameters</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="text-blue">current_title</span></td>
+                                    <td>string</td>
+                                    <td><span class="required-label">required</span> Current job title</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">target_role</span></td>
+                                    <td>string</td>
+                                    <td>Target position (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">skills</span></td>
+                                    <td>array</td>
+                                    <td>Current skills and expertise</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="text-blue">tone</span></td>
+                                    <td>enum</td>
+                                    <td>professional, approachable, thought_leader, technical</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-purple mb-3">Example Response</h4>
+                        <div class="code-block">
+                            <code>{
+  "headline": "Senior Product Manager | AI/ML | B2B SaaS | Building Products at Scale",
+  "headline_alternatives": [
+    "Product Leader | AI/ML Systems | Former Meta Engineer | Now at TechCorp",
+    "Senior PM - AI Platforms | 8+ Years | Shipped to 10M+ Users"
+  ],
+  "summary": "I build AI-powered products that scale. 8+ years driving adoption and growth...",
+  "experience_bullets": [
+    "Led AI feature adoption from 0→1, reaching 2M+ users in Q4",
+    "Managed $15M+ budget across 3 product pillars"
+  ],
+  "skills_to_add": ["Large Language Models", "Prompt Engineering", "Gen AI"],
+  "keywords_included": ["Product Strategy", "Cross-functional Leadership", "AI/ML"],
+  "estimated_profile_strength": "advanced"
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Rate Limits Section -->
+            <section id="rate-limits" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Rate Limits</h2>
+                <div class="endpoint-card">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Default Rate Limit</span>
+                            <span class="font-bold">100 requests/minute</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Burst Limit</span>
+                            <span class="font-bold">500 requests/15 min</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Daily Limit</span>
+                            <span class="font-bold">50,000 requests/24 hrs</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">HTTP Status Code</span>
+                            <span class="font-bold">429 (Too Many Requests)</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-4">When rate limited, check the <code class="text-blue">X-RateLimit-Reset</code> header for when you can retry.</p>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Code Examples Section -->
+            <section id="code-examples" class="mb-16">
+                <h2 class="text-3xl font-bold mb-8 text-gold">Code Examples</h2>
+
+                <!-- Python Example -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-blue mb-4">Python</h3>
+                    <div class="code-block">
+                        <code>import requests
+import json
+
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.theaisuperheroes.com/v1"
+
+headers = {
+    "X-API-Key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# Build a resume
+resume_data = {
+    "user_name": "Sarah Johnson",
+    "email": "sarah@example.com",
+    "target_role": "Senior Product Manager",
+    "job_description": "We're hiring a Senior PM...",
+    "experience": [
+        {
+            "company": "Tech Corp",
+            "title": "Product Manager",
+            "start_date": "2021-01",
+            "end_date": "Present",
+            "bullets": ["Led 40% revenue growth", "Managed team of 8"]
+        }
+    ],
+    "skills": ["Product Management", "Agile", "Analytics"]
+}
+
+response = requests.post(
+    f"{BASE_URL}/build-resume",
+    headers=headers,
+    json=resume_data
+)
+
+result = response.json()
+print(f"Resume URL: {result['resume_url']}")
+print(f"ATS Score: {result['ats_score']}")
+
+# Search for jobs
+jobs_response = requests.get(
+    f"{BASE_URL}/search-jobs",
+    headers=headers,
+    params={
+        "query": "Python Developer",
+        "location": "remote",
+        "max_results": 10
+    }
+)
+
+jobs = jobs_response.json()
+for job in jobs['jobs']:
+    print(f"{job['title']} at {job['company']}")</code>
+                    </div>
+                </div>
+
+                <!-- JavaScript Example -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-blue mb-4">JavaScript</h3>
+                    <div class="code-block">
+                        <code>const API_KEY = "your_api_key_here";
+const BASE_URL = "https://api.theaisuperheroes.com/v1";
+
+const headers = {
+  "X-API-Key": API_KEY,
+  "Content-Type": "application/json"
+};
+
+// Build a resume
+async function buildResume(resumeData) {
+  const response = await fetch(`${BASE_URL}/build-resume`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(resumeData)
+  });
+
+  const result = await response.json();
+  console.log(`Resume URL: ${result.resume_url}`);
+  console.log(`ATS Score: ${result.ats_score}`);
+  return result;
+}
+
+// Search for jobs
+async function searchJobs(query, location) {
+  const params = new URLSearchParams({
+    query,
+    location,
+    max_results: 10
+  });
+
+  const response = await fetch(
+    `${BASE_URL}/search-jobs?${params}`,
+    { headers }
+  );
+
+  const jobs = await response.json();
+  jobs.jobs.forEach(job => {
+    console.log(`${job.title} at ${job.company}`);
+  });
+  return jobs;
+}
+
+// Auto apply to a job
+async function applyToJob(jobId, resumeUrl) {
+  const response = await fetch(`${BASE_URL}/auto-apply`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      job_id: jobId,
+      resume_url: resumeUrl,
+      user_email: "sarah@example.com",
+      auto_generate_cover_letter: true
+    })
+  });
+
+  return await response.json();
+}</code>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Affiliate Program Section -->
+            <section id="affiliate" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Affiliate Program</h2>
+                <div class="bg-gradient-to-r from-purple from-10% to-blue to-90% bg-opacity-20 rounded-lg p-8 border border-purple border-opacity-50">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-gold mb-2">30%</div>
+                            <p class="text-gray-300">Revenue Share</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-blue mb-2">Monthly</div>
+                            <p class="text-gray-300">Payouts</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-purple mb-2">$50</div>
+                            <p class="text-gray-300">Minimum Payout</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6">Earn 30% commission on every API call from users you refer. Track real-time performance and get paid monthly via Stripe.</p>
+                    <a href="#" class="inline-block bg-gold text-navy font-bold px-6 py-3 rounded hover:bg-opacity-90 transition">
+                        Join Affiliate Program
+                    </a>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Getting Started Guide Section -->
+            <section id="getting-started" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Getting Started</h2>
+                <div class="space-y-4">
+                    <div class="bg-opacity-10 bg-blue rounded-lg p-6 border border-blue border-opacity-30">
+                        <h3 class="text-xl font-semibold text-blue mb-2">1. Sign Up</h3>
+                        <p class="text-gray-300">Create a free account at <a href="#" class="text-blue hover:underline">theaisuperheroes.com</a>. Free tier includes 100 API calls per month.</p>
+                    </div>
+                    <div class="bg-opacity-10 bg-blue rounded-lg p-6 border border-blue border-opacity-30">
+                        <h3 class="text-xl font-semibold text-blue mb-2">2. Get Your API Key</h3>
+                        <p class="text-gray-300">Navigate to your dashboard and generate an API key. Store it securely and never share it publicly.</p>
+                    </div>
+                    <div class="bg-opacity-10 bg-blue rounded-lg p-6 border border-blue border-opacity-30">
+                        <h3 class="text-xl font-semibold text-blue mb-2">3. Make Your First Request</h3>
+                        <p class="text-gray-300">Use the code examples above to call any endpoint. Check the documentation for each endpoint's parameters and responses.</p>
+                    </div>
+                    <div class="bg-opacity-10 bg-blue rounded-lg p-6 border border-blue border-opacity-30">
+                        <h3 class="text-xl font-semibold text-blue mb-2">4. Scale Up</h3>
+                        <p class="text-gray-300">Upgrade to a paid plan as your needs grow. We offer flexible per-call pricing with no long-term contracts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider my-12"></div>
+
+            <!-- Support Section -->
+            <section id="support" class="mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-gold">Support & Resources</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="endpoint-card">
+                        <h3 class="text-xl font-semibold text-blue mb-2">Help & Support</h3>
+                        <p class="text-gray-300 mb-4">24/7 support available via email</p>
+                        <a href="mailto:api-support@theaisuperheroes.com" class="text-blue hover:underline">api-support@theaisuperheroes.com</a>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3 class="text-xl font-semibold text-blue mb-2">Status Page</h3>
+                        <p class="text-gray-300 mb-4">Check API uptime and incident status</p>
+                        <a href="https://status.theaisuperheroes.com" class="text-blue hover:underline" target="_blank">status.theaisuperheroes.com</a>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3 class="text-xl font-semibold text-purple mb-2">Compliance</h3>
+                        <p class="text-gray-300 mb-4">SOC2 Type II certified, GDPR & CCPA compliant</p>
+                    </div>
+                    <div class="endpoint-card">
+                        <h3 class="text-xl font-semibold text-purple mb-2">SLA</h3>
+                        <p class="text-gray-300 mb-4">99.9% uptime guarantee with 500ms avg response time</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-navy border-t border-purple border-opacity-20 px-6 py-12">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <a href="index.html" class="text-xl font-bold mb-4 inline-block">
+                        <span class="text-gold">The AI</span><span class="text-blue">Superheroes</span>
+                    </a>
+                    <p class="text-gray-400 text-sm">AI-powered tools for career growth</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gold mb-3">Product</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover-blue">Resume Builder</a></li>
+                        <li><a href="#" class="hover-blue">Job Search</a></li>
+                        <li><a href="#" class="hover-blue">Salary Research</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gold mb-3">Developers</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover-blue">API Docs</a></li>
+                        <li><a href="#" class="hover-blue">GitHub</a></li>
+                        <li><a href="#" class="hover-blue">Status</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gold mb-3">Company</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover-blue">Privacy</a></li>
+                        <li><a href="#" class="hover-blue">Terms</a></li>
+                        <li><a href="#" class="hover-blue">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-purple border-opacity-20 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2026 The AI Superheroes. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Update active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

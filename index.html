@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TheAISuperHeroes - The AI-to-AI integration hub for AI-powered business tools. Connect your AI agent to Resume SuperHero, RankAI, and NexusAI.">
+    <meta name="keywords" content="AI integration, MCP registry, API gateway, Resume Builder, SEO Audit, Marketing Automation">
+    <meta property="og:title" content="TheAISuperHeroes - AI Integration Hub">
+    <meta property="og:description" content="Where AI agents discover and integrate with our suite of AI business tools.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://theaisuperheroes.com">
+    <meta property="og:image" content="https://theaisuperheroes.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TheAISuperHeroes - AI Integration Hub">
+    <meta name="twitter:description" content="Where AI agents discover and integrate with our suite of AI business tools.">
+
+    <title>TheAISuperHeroes - The AI Integration Hub</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-navy: #0a0e27;
+            --color-blue: #00d4ff;
+            --color-purple: #8b5cf6;
+            --color-gold: #fbbf24;
+            --color-dark-purple: #1e1b4b;
+            --color-dark-blue: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-navy);
+            color: #e0e7ff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Animated gradient background for hero */
+        .hero-gradient {
+            position: relative;
+            background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-dark-purple) 50%, var(--color-dark-blue) 100%);
+            overflow: hidden;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(30px, -30px);
+            }
+        }
+
+        /* Grid background pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+
+        /* Glowing text gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-purple) 50%, var(--color-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Glowing card effect */
+        .glow-card {
+            position: relative;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(30, 27, 75, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 0 20px rgba(0, 212, 255, 0.1),
+                inset 0 0 20px rgba(139, 92, 246, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .glow-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .glow-card:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow:
+                0 0 40px rgba(0, 212, 255, 0.3),
+                inset 0 0 40px rgba(139, 92, 246, 0.1),
+                0 0 80px rgba(139, 92, 246, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .glow-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            position: relative;
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-purple) 100%);
+            color: var(--color-navy);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 12px 32px;
+            border: 2px solid var(--color-blue);
+            background: transparent;
+            color: var(--color-blue);
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-d2c {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--color-gold);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .badge-ai {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--color-blue);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .badge-live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .badge-coming {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--color-purple);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        /* Fade in on scroll animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Code block styling */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--color-blue);
+        }
+
+        .code-block::selection {
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        /* Section spacing */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* How it works steps */
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-purple) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-navy);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            margin: 0 auto 20px;
+        }
+
+        /* Product card icon placeholder */
+        .product-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive grid */
+        .grid-auto {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        @media (max-width: 768px) {
+            .grid-auto {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Text utilities */
+        .text-sm-tight {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .text-muted {
+            color: rgba(224, 231, 255, 0.7);
+        }
+
+        /* Footer link styling */
+        a {
+            color: var(--color-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--color-purple);
+            text-decoration: underline;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 border-b border-blue-500 border-opacity-20 backdrop-blur-md bg-opacity-80 bg-navy">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gradient">TheAISuperHeroes</div>
+            <div class="hidden md:flex gap-8 items-center">
+                <a href="#how-it-works" class="text-sm-tight hover:text-blue-400">How It Works</a>
+                <a href="#products" class="text-sm-tight hover:text-blue-400">Products</a>
+                <a href="#api" class="text-sm-tight hover:text-blue-400">API Docs</a>
+                <a href="#partners" class="text-sm-tight hover:text-blue-400">Partners</a>
+                <button class="btn-primary text-sm">Get Started</button>
+            </div>
+            <button class="md:hidden btn-secondary text-sm">Menu</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <div class="grid-bg"></div>
+        <div class="hero-gradient::before"></div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+            <h1 class="text-5xl sm:text-7xl font-bold mb-6 text-gradient">The AI SuperHeroes</h1>
+
+            <p class="text-xl sm:text-2xl text-blue-300 mb-8 max-w-3xl mx-auto text-muted">
+                The Integration Hub Where AI Agents Power Up
+            </p>
+
+            <p class="text-base sm:text-lg text-muted mb-12 max-w-2xl mx-auto leading-relaxed">
+                Connect your AI agent to our suite of tools. Resume building, SEO audits, marketing automation — all accessible via simple API calls and MCP integrations.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({ behavior: 'smooth' })">
+                    Explore Integrations
+                </button>
+                <button class="btn-secondary" onclick="document.getElementById('api').scrollIntoView({ behavior: 'smooth' })">
+                    View API Docs
+                </button>
+            </div>
+
+            <!-- Floating hero accent -->
+            <div class="mt-20 float">
+                <div class="inline-block p-8 rounded-2xl glow-card backdrop-blur-lg">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-gradient mb-2">3</div>
+                        <div class="text-sm text-muted">AI-Powered Tools Ready to Integrate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-dark-blue relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-5xl font-bold text-center mb-4 text-gradient fade-in">How It Works</h2>
+            <p class="text-center text-muted mb-16 fade-in max-w-2xl mx-auto">
+                Three simple steps to integrate with The AI SuperHeroes and start earning
+            </p>
+
+            <div class="grid-auto">
+                <!-- Step 1 -->
+                <div class="text-center fade-in">
+                    <div class="step-number">1</div>
+                    <h3 class="text-2xl font-bold mb-4">Discover</h3>
+                    <p class="text-muted text-sm-tight">
+                        Browse our AI tools and find what your agent needs. From resume optimization to SEO audits, explore everything we offer.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center fade-in">
+                    <div class="step-number">2</div>
+                    <h3 class="text-2xl font-bold mb-4">Connect</h3>
+                    <p class="text-muted text-sm-tight">
+                        Simple MCP or REST API integration in minutes. Integrate with our tools directly into your AI agent workflow.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center fade-in">
+                    <div class="step-number">3</div>
+                    <h3 class="text-2xl font-bold mb-4">Earn</h3>
+                    <p class="text-muted text-sm-tight">
+                        Revenue share on every customer your agent sends us. Grow your earnings as your AI agent delivers value.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-navy relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-5xl font-bold text-center mb-4 text-gradient fade-in">Our AI Tools</h2>
+            <p class="text-center text-muted mb-16 fade-in max-w-2xl mx-auto">
+                A growing suite of AI-powered business tools ready for integration
+            </p>
+
+            <div class="grid-auto">
+                <!-- Product 1: Resume SuperHero -->
+                <div class="glow-card p-8 fade-in flex flex-col h-full">
+                    <div class="product-icon">📄</div>
+                    <h3 class="text-2xl font-bold mb-2">Resume SuperHero</h3>
+                    <p class="text-blue-400 font-semibold mb-4">AI-Powered Resume Builder</p>
+
+                    <ul class="flex-1 mb-6 space-y-2 text-sm-tight text-muted">
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>ATS optimization for maximum impact</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>Job search & auto-apply capabilities</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>Real-time suggestions & improvements</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="badge badge-d2c">D2C</span>
+                        <span class="badge badge-ai">AI-to-AI</span>
+                        <span class="badge badge-live">API Live</span>
+                    </div>
+
+                    <p class="text-sm text-muted mb-6">$9.99/mo • API calls available</p>
+
+                    <div class="flex flex-col gap-2">
+                        <a href="https://resumesuperhero.com" target="_blank" class="btn-primary text-center w-full text-sm">Visit Product</a>
+                        <button class="btn-secondary w-full text-sm">Integrate Now</button>
+                    </div>
+                </div>
+
+                <!-- Product 2: RankAI -->
+                <div class="glow-card p-8 fade-in flex flex-col h-full">
+                    <div class="product-icon">📊</div>
+                    <h3 class="text-2xl font-bold mb-2">RankAI</h3>
+                    <p class="text-purple-400 font-semibold mb-4">AI SEO Audit & Optimization</p>
+
+                    <ul class="flex-1 mb-6 space-y-2 text-sm-tight text-muted">
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <span>Intelligent site crawler & analysis</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <span>Keyword research & optimization</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <span>Competitor analysis & insights</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="badge badge-d2c">D2C</span>
+                        <span class="badge badge-ai">AI-to-AI</span>
+                        <span class="badge badge-coming">Coming Soon</span>
+                    </div>
+
+                    <p class="text-sm text-muted mb-6">Pricing TBD</p>
+
+                    <div class="flex flex-col gap-2">
+                        <button class="btn-primary text-center w-full text-sm opacity-50 cursor-not-allowed">Coming Soon</button>
+                        <button class="btn-secondary w-full text-sm">Get Notified</button>
+                    </div>
+                </div>
+
+                <!-- Product 3: NexusAI -->
+                <div class="glow-card p-8 fade-in flex flex-col h-full">
+                    <div class="product-icon">🚀</div>
+                    <h3 class="text-2xl font-bold mb-2">NexusAI</h3>
+                    <p class="text-gold font-semibold mb-4">AI Marketing Agency</p>
+
+                    <ul class="flex-1 mb-6 space-y-2 text-sm-tight text-muted">
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>AI-generated content & copy</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>Ad campaigns & social media automation</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-gold mt-1">•</span>
+                            <span>Email marketing & automation flows</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="badge badge-d2c">D2C</span>
+                        <span class="badge badge-ai">AI-to-AI</span>
+                        <span class="badge badge-coming">Coming Soon</span>
+                    </div>
+
+                    <p class="text-sm text-muted mb-6">Custom retainers available</p>
+
+                    <div class="flex flex-col gap-2">
+                        <button class="btn-primary text-center w-full text-sm opacity-50 cursor-not-allowed">Coming Soon</button>
+                        <button class="btn-secondary w-full text-sm">Get Notified</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Integration Section -->
+    <section id="api" class="py-20 bg-dark-blue relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-5xl font-bold text-center mb-4 text-gradient fade-in">API & Integration</h2>
+            <p class="text-center text-muted mb-16 fade-in max-w-2xl mx-auto">
+                Multiple integration methods for seamless AI agent connectivity
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- MCP Tool Definition -->
+                <div class="glow-card p-8 fade-in">
+                    <h3 class="text-xl font-bold mb-4">MCP Tool Definition</h3>
+                    <p class="text-sm-tight text-muted mb-4">
+                        Use this JSON to define the Resume SuperHero tool in your MCP-compatible AI agent:
+                    </p>
+                    <div class="code-block">
+{
+  "name": "resume_superhero",
+  "description": "Build an ATS-optimized resume for your user",
+  "endpoint": "https://api.theaisuperheroes.com/v1/resume",
+  "parameters": {
+    "user_name": "string",
+    "experience": "array",
+    "target_role": "string",
+    "job_description": "string"
+  }
+}
+                    </div>
+                </div>
+
+                <!-- REST API Example -->
+                <div class="glow-card p-8 fade-in">
+                    <h3 class="text-xl font-bold mb-4">REST API Example</h3>
+                    <p class="text-sm-tight text-muted mb-4">
+                        Simple curl request to build a resume:
+                    </p>
+                    <div class="code-block">
+curl -X POST \
+  https://api.theaisuperheroes.com/v1/resume \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_name": "Jane Doe",
+    "target_role": "Product Manager",
+    "job_description": "We are looking for...",
+    "experience": [
+      {
+        "title": "Senior PM",
+        "company": "TechCo",
+        "duration": "2 years"
+      }
+    ]
+  }'
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Features -->
+            <div class="mt-16 grid md:grid-cols-3 gap-6">
+                <div class="glow-card p-6 text-center fade-in">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h4 class="font-bold mb-2">Lightning Fast</h4>
+                    <p class="text-sm-tight text-muted">Response times under 100ms for optimal agent experience</p>
+                </div>
+                <div class="glow-card p-6 text-center fade-in">
+                    <div class="text-3xl mb-3">🔐</div>
+                    <h4 class="font-bold mb-2">Secure</h4>
+                    <p class="text-sm-tight text-muted">OAuth2, API keys, and enterprise SSO support</p>
+                </div>
+                <div class="glow-card p-6 text-center fade-in">
+                    <div class="text-3xl mb-3">📚</div>
+                    <h4 class="font-bold mb-2">Well Documented</h4>
+                    <p class="text-sm-tight text-muted">Full SDK support and interactive API documentation</p>
+                </div>
+            </div>
+
+            <!-- Authentication section -->
+            <div class="mt-12 glow-card p-8 fade-in">
+                <h3 class="text-2xl font-bold mb-4">Getting Started</h3>
+                <ol class="space-y-4 text-muted">
+                    <li class="flex gap-4">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-navy flex items-center justify-center font-bold">1</span>
+                        <span><strong class="text-blue-300">Create an account</strong> on TheAISuperHeroes and sign up for partnership</span>
+                    </li>
+                    <li class="flex gap-4">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-navy flex items-center justify-center font-bold">2</span>
+                        <span><strong class="text-blue-300">Generate API keys</strong> from your dashboard for secure authentication</span>
+                    </li>
+                    <li class="flex gap-4">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-navy flex items-center justify-center font-bold">3</span>
+                        <span><strong class="text-blue-300">Integrate with your AI agent</strong> using MCP or REST API</span>
+                    </li>
+                    <li class="flex gap-4">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-navy flex items-center justify-center font-bold">4</span>
+                        <span><strong class="text-blue-300">Start earning</strong> 30% recurring revenue on referrals</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner Program Section -->
+    <section id="partners" class="py-20 bg-navy relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-5xl font-bold text-center mb-4 text-gradient fade-in">Partner Program</h2>
+            <p class="text-center text-muted mb-16 fade-in max-w-2xl mx-auto">
+                Build with us and grow your revenue
+            </p>
+
+            <!-- Earnings Highlight -->
+            <div class="max-w-2xl mx-auto mb-16 glow-card p-12 text-center fade-in">
+                <h3 class="text-3xl font-bold text-gold mb-2">30% Recurring Revenue</h3>
+                <p class="text-lg text-muted mb-6">Earn commissions on every customer your AI agent refers</p>
+                <p class="text-sm-tight text-muted">
+                    Partner with us and unlock a new revenue stream. Whether your agent is making one referral or a thousand, you earn 30% recurring commission on every subscription. It's passive income that scales with your AI agent's success.
+                </p>
+            </div>
+
+            <!-- Partner Steps -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="glow-card p-8 text-center fade-in">
+                    <div class="step-number">1</div>
+                    <h4 class="text-xl font-bold mb-3">Register</h4>
+                    <p class="text-sm-tight text-muted">Sign up as a partner and complete your profile with details about your AI agent</p>
+                </div>
+                <div class="glow-card p-8 text-center fade-in">
+                    <div class="step-number">2</div>
+                    <h4 class="text-xl font-bold mb-3">Integrate</h4>
+                    <p class="text-sm-tight text-muted">Add our MCP tools to your agent workflow using your unique partner API key</p>
+                </div>
+                <div class="glow-card p-8 text-center fade-in">
+                    <div class="step-number">3</div>
+                    <h4 class="text-xl font-bold mb-3">Earn</h4>
+                    <p class="text-sm-tight text-muted">Watch your earnings grow as your agent drives subscriptions to our tools</p>
+                </div>
+            </div>
+
+            <!-- Email Signup -->
+            <div class="max-w-2xl mx-auto glow-card p-12 fade-in">
+                <h3 class="text-2xl font-bold mb-4">Join Our Partner Program</h3>
+                <p class="text-muted mb-6">Get exclusive partner resources and stay updated on new tools and opportunities.</p>
+
+                <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+                    <input
+                        type="email"
+                        placeholder="your@email.com"
+                        class="flex-1 px-4 py-3 rounded-lg bg-dark-blue border border-blue-500 border-opacity-30 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                        required
+                    >
+                    <button type="submit" class="btn-primary whitespace-nowrap">Get Started</button>
+                </form>
+
+                <p class="text-xs text-muted mt-4">
+                    We'll never share your email. Unsubscribe anytime. Read our <a href="#" class="text-blue-400 hover:text-purple-400">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-dark-blue relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-5"></div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6">Ready to Power Up?</h2>
+            <p class="text-muted mb-8 max-w-2xl mx-auto">
+                Integrate The AI SuperHeroes into your agent workflow today and unlock new revenue opportunities.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-primary" onclick="document.getElementById('api').scrollIntoView({ behavior: 'smooth' })">
+                    View API Documentation
+                </button>
+                <button class="btn-secondary" onclick="document.getElementById('partners').scrollIntoView({ behavior: 'smooth' })">
+                    Join Partner Program
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy border-t border-blue-500 border-opacity-20 py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Brand -->
+                <div>
+                    <div class="text-2xl font-bold text-gradient mb-4">TheAISuperHeroes</div>
+                    <p class="text-sm-tight text-muted">
+                        The AI-to-AI integration hub for AI-powered business tools.
+                    </p>
+                </div>
+
+                <!-- Products -->
+                <div>
+                    <h4 class="font-bold mb-4">Products</h4>
+                    <ul class="space-y-2 text-sm-tight">
+                        <li><a href="https://resumesuperhero.com" target="_blank">Resume SuperHero</a></li>
+                        <li><a href="#products">RankAI (Soon)</a></li>
+                        <li><a href="#products">NexusAI (Soon)</a></li>
+                        <li><a href="#api">API Documentation</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm-tight">
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#partners">Partner Program</a></li>
+                        <li><a href="mailto:partners@theaisuperheroes.com">Contact Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social -->
+                <div>
+                    <h4 class="font-bold mb-4">Connect</h4>
+                    <ul class="space-y-2 text-sm-tight">
+                        <li><a href="#">Twitter / X</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Discord Community</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-blue-500 border-opacity-20 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm-tight text-muted">
+                <p>&copy; 2026 The AI SuperHeroes. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact: partners@theaisuperheroes.com</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll reveal animation script -->
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.md\\:hidden')?.addEventListener('click', function() {
+            alert('Mobile menu functionality can be added here');
+        });
+    </script>
+</body>
+</html>
