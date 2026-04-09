@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheAISuperHeroes - Your AI-Powered Business Suite</title>
-    <meta name="description" content="Five specialized AI tools. One mission: supercharge your business. ResumeSuperHero, ShopifySuperHero, SEOAISuperHero, MCPSuperHero, and TheAISuperHeroes hub.">
+    <meta name="description" content="TheAi SuperHeroes: The complete AI business toolkit. Resume optimization, Shopify automation, SEO dominance, and universal AI connections. Four AI products, one mission.">
+    <meta name="keywords" content="AI tools, business automation, AI products, resume optimizer, shopify automation, SEO AI, AI connections">
+    <meta property="og:title" content="TheAi SuperHeroes — AI SuperPowers for Every Business">
+    <meta property="og:description" content="The complete AI business toolkit. Resume SuperHero, Shopify SuperHero, SEOAi SuperHero, and MCP SuperHero.">
+    <meta property="og:image" content="https://theaisuperheroes.com/og-image.png">
+    <meta property="og:url" content="https://theaisuperheroes.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#FF6B35">
+
+    <title>TheAi SuperHeroes — AI SuperPowers for Every Business</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVV7C7Y5YY"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-RVV7C7Y5YY');
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -30,779 +26,1422 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-P2C3KN7T');</script>
 
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVV7C7Y5YY"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RVV7C7Y5YY');
+    </script>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Organization",
+      "name": "TheAi SuperHeroes",
+      "description": "The complete AI business toolkit. Four AI products for resume optimization, Shopify automation, SEO dominance, and universal AI connections.",
+      "url": "https://theaisuperheroes.com",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "30000"
+      }
+    }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #0A0A0A;
+            --card: #141414;
+            --card-border: rgba(255,255,255,0.06);
+            --orange: #FF6B35;
+            --yellow: #FFD93D;
+            --blue: #4ECDC4;
+            --red: #FF4444;
+            --purple: #6C63FF;
+            --teal: #4ECDC4;
+            --pink: #E97698;
+            --white: #FFFFFF;
+            --gray: #888;
+            --light-gray: #B0B0B0;
+            --max-w: 1400px;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: #0f172a;
-            color: rgb(226, 232, 240);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--black);
+            color: var(--white);
             line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', sans-serif;
+        a { color: inherit; text-decoration: none; }
+
+        /* ── Announcement Bar ── */
+        .announce {
+            background: var(--black);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            color: var(--light-gray);
+        }
+        .announce a {
+            color: var(--orange);
             font-weight: 600;
+            margin-left: 6px;
         }
+        .announce a:hover { text-decoration: underline; }
 
-        /* Hero Gradient Background */
-        .hero-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-        }
-
-        .hero-glow {
-            position: relative;
-        }
-
-        .hero-glow::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(ellipse at 60% 50%, rgba(124,58,237,0.25) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .hero-glow::after {
-            content: '';
-            position: absolute;
-            bottom: -10%;
-            left: -20%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(ellipse at 20% 80%, rgba(37,99,235,0.2) 0%, transparent 60%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #fbbf24 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Primary Button */
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-        }
-
-        /* Secondary Button (Green) */
-        .btn-secondary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Tertiary Button (Outline) */
-        .btn-tertiary {
-            background: transparent;
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
-            cursor: pointer;
-            color: rgb(226, 232, 240);
-        }
-
-        .btn-tertiary:hover {
-            background: rgba(148, 163, 184, 0.1);
-            border-color: rgba(148, 163, 184, 0.5);
-        }
-
-        /* Navigation */
+        /* ── Navigation ── */
         nav {
-            background: transparent;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        /* Product Card */
-        .product-card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 16px;
-            padding: 32px 24px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .logo svg { width: 28px; height: 28px; }
+        .logo .brand-italic {
+            font-style: italic;
+            color: var(--orange);
         }
 
-        .product-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.25);
-            border-color: rgba(124, 58, 237, 0.6);
+        .nav-pill {
+            display: flex;
+            gap: 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px;
+            padding: 4px;
+        }
+        .nav-pill a {
+            padding: 8px 20px;
+            font-size: 0.88rem;
+            color: var(--light-gray);
+            border-radius: 999px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .nav-pill a:hover {
+            color: var(--white);
+            background: rgba(255,255,255,0.08);
         }
 
-        /* Icon Circle */
-        .icon-circle {
-            width: 60px;
-            height: 60px;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-right .login {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-right .login:hover { color: var(--white); }
+
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--white);
+            color: var(--black);
+            padding: 10px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .btn-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(255,255,255,0.15);
+        }
+
+        .btn-cta-accent {
+            background: linear-gradient(135deg, var(--orange), #FF8855);
+            color: var(--white);
+        }
+        .btn-cta-accent:hover {
+            box-shadow: 0 8px 24px rgba(255,107,53,0.35);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 80px 40px 60px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 85vh;
+        }
+
+        .hero-left {}
+
+        .social-proof {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .avatars {
+            display: flex;
+        }
+        .av {
+            width: 32px; height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        /* Pill Badge */
-        .pill-badge {
-            display: inline-block;
-            background: rgba(124, 58, 237, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #a78bfa;
-            margin-bottom: 24px;
-        }
-
-        /* Value Prop Card */
-        .value-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .value-card:hover {
-            background: rgba(30, 41, 59, 0.9);
-            border-color: rgba(124, 58, 237, 0.4);
-        }
-
-        /* Step Card */
-        .step-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            border-radius: 12px;
-            padding: 32px;
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            font-size: 48px;
+            font-size: 0.7rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #fbbf24 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-left: -8px;
+            border: 2px solid var(--black);
+        }
+        .av:first-child { margin-left: 0; }
+        .av-1 { background: var(--teal); color: var(--black); }
+        .av-2 { background: var(--purple); color: var(--black); }
+        .av-3 { background: var(--pink); color: var(--black); }
+
+        .proof-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .proof-stars { color: var(--yellow); font-size: 0.75rem; letter-spacing: 1px; }
+        .proof-text {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 28px;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--orange);
+            text-decoration: underline;
+            text-decoration-color: rgba(255,107,53,0.3);
+            text-underline-offset: 6px;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 480px;
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            color: var(--white);
+            padding: 10px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .btn-outline:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* ── Hero Right: Floating UI Cards ── */
+        .hero-right {
+            position: relative;
+            height: 520px;
+        }
+
+        .mock-dashboard {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: -20px;
+            bottom: 0;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .mock-topbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .mock-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+        }
+        .mock-dot-r { background: #FF5F57; }
+        .mock-dot-y { background: #FFBD2E; }
+        .mock-dot-g { background: #28CA41; }
+        .mock-label {
+            margin-left: 12px;
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .mock-body {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            height: calc(100% - 42px);
+        }
+        .mock-sidebar {
+            border-right: 1px solid var(--card-border);
+            padding: 16px 12px;
+        }
+        .mock-sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: var(--gray);
+            margin-bottom: 2px;
+            cursor: default;
+        }
+        .mock-sidebar-item.active {
+            background: rgba(244,248,114,0.1);
+            color: var(--orange);
+        }
+        .mock-sidebar-item .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .mock-main {
+            padding: 20px;
+        }
+        .mock-stat-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .mock-stat {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .mock-stat-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+        .mock-stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+        .mock-stat-value.yellow { color: var(--orange); }
+        .mock-stat-value.teal { color: var(--teal); }
+        .mock-stat-value.purple { color: var(--purple); }
+
+        /* Floating notification badges */
+        .float-badge {
+            position: absolute;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            animation: float-slow 6s ease-in-out infinite;
+        }
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .badge-score {
+            top: 10px;
+            right: 20px;
+            background: rgba(174,235,228,0.15);
+            border: 1px solid rgba(174,235,228,0.3);
+            color: var(--teal);
+            animation-delay: 0s;
+        }
+        .badge-score .big { font-size: 1.6rem; font-weight: 800; display: block; }
+
+        .badge-match {
+            top: 0;
+            left: -10px;
+            background: rgba(244,248,114,0.15);
+            border: 1px solid rgba(244,248,114,0.3);
+            color: var(--orange);
+            animation-delay: 1s;
+        }
+        .badge-match .tag {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--black);
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-ats {
+            bottom: 20px;
+            right: -10px;
+            background: rgba(179,168,238,0.15);
+            border: 1px solid rgba(179,168,238,0.3);
+            color: var(--purple);
+            animation-delay: 2s;
+        }
+
+        /* ── Section Shared ── */
+        .section {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray);
             margin-bottom: 16px;
         }
 
-        /* Testimonial Card */
-        .testimonial-card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(124, 58, 237, 0.3);
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            max-width: 700px;
+        }
+        .section-title em {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--gray);
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        /* ── Products Grid ── */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--orange), var(--teal), var(--purple), var(--red));
+        }
+
+        .product-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .product-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        .product-title .italic {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .price-badge {
+            background: rgba(255,107,53,0.15);
+            color: var(--orange);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .product-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--orange);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .product-cta:hover {
+            gap: 12px;
+        }
+
+        /* Product accent colors */
+        .product-card.orange::before { background: linear-gradient(90deg, var(--orange), #FF8855); }
+        .product-card.teal::before { background: linear-gradient(90deg, var(--teal), #00D9CC); }
+        .product-card.purple::before { background: linear-gradient(90deg, var(--purple), #8B7FFF); }
+        .product-card.red::before { background: linear-gradient(90deg, var(--red), #FF6666); }
+
+        /* ── How It Works ── */
+        .workflow-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+        .workflow-step.reverse { grid-template-columns: 1fr 1fr; }
+        .workflow-step.reverse .wf-visual { order: -1; }
+
+        .wf-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            opacity: 0.3;
+            margin-bottom: 12px;
+        }
+        .wf-number.yellow { color: var(--orange); }
+        .wf-number.teal { color: var(--teal); }
+        .wf-number.purple { color: var(--purple); }
+        .wf-number.pink { color: var(--pink); }
+
+        .wf-text h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .wf-text p {
+            font-size: 1rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .wf-visual {
+            position: relative;
+            height: 280px;
+        }
+        .wf-visual-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+        }
+        .big-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+        .wf-visual-inner p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* ── Testimonials ── */
+        .testimonials-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .t-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
             padding: 28px;
         }
 
-        /* FAQ Accordion */
-        .accordion-item {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
+        .t-stars {
+            color: var(--yellow);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
         }
 
-        .accordion-header {
-            background: transparent;
-            border: none;
-            padding: 20px;
-            text-align: left;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
+        .t-quote {
+            font-size: 0.95rem;
+            color: var(--light-gray);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .t-author {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
+            gap: 12px;
         }
 
-        .accordion-header:hover {
-            background: rgba(124, 58, 237, 0.1);
+        .t-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
         }
 
-        .accordion-content {
-            padding: 0 20px;
+        .t-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .t-info span {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* ── Ai-Ai Referral Hub ── */
+        .referral {
+            background: linear-gradient(135deg, rgba(255,107,53,0.08), rgba(78,205,196,0.08), rgba(108,99,255,0.08));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 60px 40px;
+            margin: 0 40px;
+        }
+
+        .ref-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .ref-title em {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .ref-subtitle {
+            font-size: 1.05rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 36px;
+        }
+
+        .ref-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .ref-stat {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .ref-stat-num {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--orange);
+            margin-bottom: 8px;
+        }
+
+        .ref-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .ref-ctas {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ── FAQ ── */
+        .faq-list {
+            max-width: 700px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--card-border);
+            padding: 24px 0;
+            cursor: pointer;
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--white);
+            transition: color 0.2s;
+        }
+
+        .faq-q:hover { color: var(--orange); }
+
+        .faq-q .arrow {
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .arrow { transform: rotate(180deg); }
+
+        .faq-a {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
 
-        .accordion-item.active .accordion-content {
-            max-height: 500px;
-            padding: 0 20px 20px 20px;
+        .faq-item.open .faq-a { max-height: 300px; }
+
+        .faq-a-inner {
+            padding-bottom: 20px;
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.7;
         }
 
-        .accordion-item.active .accordion-header {
-            background: rgba(124, 58, 237, 0.1);
+        /* ── Sticky Bottom CTA Bar ── */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10,10,10,0.95);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 200;
         }
 
-        /* Stars */
-        .star {
-            color: #fbbf24;
-            display: inline;
+        .sticky-bar-text {
+            font-size: 0.95rem;
+            color: var(--light-gray);
+        }
+
+        .sticky-bar a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--orange);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .sticky-bar a:hover { gap: 12px; }
+
+        /* ── Footer ── */
+        footer {
+            background: rgba(10,10,10,0.5);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 40px 40px;
+            margin-top: 120px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .footer-brand svg { width: 24px; height: 24px; }
+        .footer-brand .italic { font-style: italic; color: var(--orange); }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        footer h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        footer a {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        footer a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* ── Login Modal ── */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .modal-header h2 { font-size: 1.4rem; }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--black);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 12px rgba(244,248,114,0.2);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; min-height: auto; padding: 48px 24px; }
+            .hero-right { display: none; }
+            .nav-pill { display: none; }
+            .mobile-toggle { display: block; }
+            .products-grid { grid-template-columns: 1fr; }
+            .workflow-step { grid-template-columns: 1fr; gap: 24px; }
+            .workflow-step.reverse .wf-visual { order: 0; }
+            .test-grid { grid-template-columns: 1fr 1fr; }
+            .ref-stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 12px 16px; }
+            .logo { font-size: 1.1rem; }
+            .nav-right .login { display: none; }
+            .btn-cta { padding: 8px 18px; font-size: 0.85rem; }
+
+            .hero { padding: 32px 16px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-sub { font-size: 0.95rem; }
+            .hero-btns { flex-direction: column; }
+            .hero-btns .btn-cta, .hero-btns .btn-outline { width: 100%; justify-content: center; }
+
+            .section { padding: 48px 16px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .test-grid { grid-template-columns: 1fr; }
+            .ref-stats { grid-template-columns: 1fr; }
+            .referral { padding: 40px 20px; margin: 0 16px; }
+
+            .sticky-bar { padding: 10px 16px; }
+            .sticky-bar-text { font-size: 0.8rem; }
+
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            footer { padding: 32px 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .section-title { font-size: 1.5rem; }
+            .ref-stats { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .product-card { padding: 24px; }
+            .ref-title { font-size: 1.5rem; }
+            .social-proof { flex-wrap: wrap; }
         }
     </style>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2C3KN7T"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- Announcement Bar -->
+    <div class="announce">
+        ⚡ Four AI products, one mission. Explore now →
+        <a href="#products">Discover</a>
+    </div>
+
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                    <span class="text-xl font-bold">TheAI<span class="italic">SuperHeroes</span></span>
-                </div>
-
-                <!-- Nav Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#products" class="text-gray-300 hover:text-white transition">Our Products</a>
-                    <a href="#why-us" class="text-gray-300 hover:text-white transition">About</a>
-                    <a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a>
-                    <a href="#products" class="btn-primary text-white">Get Started</a>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden text-white" id="menu-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
+    <nav>
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="var(--orange)" stroke="var(--orange)"/>
+            </svg>
+            <span>TheAi <span class="brand-italic">SuperHeroes</span></span>
         </div>
+
+        <div class="nav-pill">
+            <a href="#products">Products</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#referral">Earn Money</a>
+            <a href="#faq">FAQ</a>
+        </div>
+
+        <div class="nav-right">
+            <span class="login" onclick="document.getElementById('loginModal').classList.add('show')">Login</span>
+            <a href="#products" class="btn-cta">Explore Products</a>
+        </div>
+
+        <button class="mobile-toggle" onclick="document.querySelector('.nav-pill').style.display = document.querySelector('.nav-pill').style.display === 'flex' ? 'none' : 'flex'">☰</button>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-bg hero-glow relative py-24 md:py-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto">
-                <!-- Pill Badge -->
-                <div class="pill-badge">AI-Powered Business Suite · 5 Products</div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-left">
+            <!-- Status Pill -->
+            <div style="display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--card-border);padding:8px 16px;border-radius:999px;font-size:0.82rem;color:var(--light-gray);margin-bottom:24px;">
+                <span style="color:var(--orange);">⚡</span> 4 AI Products · One Mission
+            </div>
 
-                <!-- Headline -->
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                    Your <span class="gradient-text">AI-Powered</span> Business Suite
-                </h1>
-
-                <!-- Subheadline -->
-                <p class="text-lg md:text-xl text-gray-300 mb-8">
-                    Five specialized AI tools. One mission: supercharge your business.
-                </p>
-
-                <!-- Social Proof -->
-                <div class="mb-10">
-                    <div class="flex items-center justify-center space-x-2 mb-4">
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <p class="text-gray-400">Trusted by 12,000+ professionals</p>
+            <div class="social-proof">
+                <div class="avatars">
+                    <div class="av av-1">RS</div>
+                    <div class="av av-2">SS</div>
+                    <div class="av av-3">SA</div>
                 </div>
-
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="#products" class="btn-primary text-white w-full sm:w-auto">
-                        Explore Our Products →
-                    </a>
-                    <a href="#products" class="btn-secondary text-white w-full sm:w-auto">
-                        + 1 Month Free Replit
-                    </a>
+                <div class="proof-meta">
+                    <div class="proof-stars">★★★★★</div>
+                    <div class="proof-text">Trusted by 30,000+ users worldwide</div>
                 </div>
+            </div>
+
+            <h1>AI <em>SuperPowers</em> for every business.</h1>
+
+            <p class="hero-sub">The complete AI business toolkit. Resume optimization, Shopify automation, SEO dominance, and universal AI connections — all under one roof.</p>
+
+            <div class="hero-btns">
+                <a href="#products" class="btn-cta btn-cta-accent">Explore Products →</a>
+                <a href="#how-it-works" class="btn-outline">Learn More</a>
             </div>
         </div>
-    </section>
 
-    <!-- Products Section -->
-    <section id="products" class="py-24 md:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">Our Products</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    Everything you need to succeed. Pick the tools that match your goals.
-                </p>
+        <div class="hero-right">
+            <!-- Floating badges -->
+            <div class="float-badge badge-match">
+                <span class="tag">4 PRODUCTS</span><br>
+                Complete Toolkit
+            </div>
+            <div class="float-badge badge-score">
+                <span class="big">30K+</span>
+                Active Users
+            </div>
+            <div class="float-badge badge-ats">
+                ⚡ AI Powered
             </div>
 
-            <!-- Products Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                <!-- Product 1: ResumeSuperHero -->
-                <div class="product-card">
-                    <div class="icon-circle">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 12h6m-6 4h6m2-13H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Resume<span class="italic">SuperHero</span></h3>
-                    <p class="text-2xl font-bold mb-3 text-gray-300">$9.99<span class="text-sm text-gray-500">/mo</span></p>
-                    <p class="text-gray-400 mb-6">AI resume builder + interview coach</p>
-                    <div class="flex flex-col gap-3">
-                        <a href="https://resumesuperhero.com" class="btn-tertiary text-center">Visit Site →</a>
-                        <a href="https://buy.stripe.com/test_resume" class="btn-primary text-white text-center">Subscribe →</a>
-                    </div>
+            <!-- Dashboard mockup -->
+            <div class="mock-dashboard">
+                <div class="mock-topbar">
+                    <div class="mock-dot mock-dot-r"></div>
+                    <div class="mock-dot mock-dot-y"></div>
+                    <div class="mock-dot mock-dot-g"></div>
+                    <span class="mock-label">TheAi SuperHeroes Dashboard</span>
                 </div>
-
-                <!-- Product 2: ShopifySuperHero -->
-                <div class="product-card">
-                    <div class="icon-circle">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M16 11a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
-                        </svg>
+                <div class="mock-body">
+                    <div class="mock-sidebar">
+                        <div class="mock-sidebar-item active"><span class="dot"></span> Overview</div>
+                        <div class="mock-sidebar-item"><span class="dot"></span> Resume SH</div>
+                        <div class="mock-sidebar-item"><span class="dot"></span> Shopify SH</div>
+                        <div class="mock-sidebar-item"><span class="dot"></span> SEOAi SH</div>
+                        <div class="mock-sidebar-item"><span class="dot"></span> MCP SH</div>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Shopify<span class="italic">SuperHero</span></h3>
-                    <p class="text-2xl font-bold mb-3 text-gray-300">$14.99<span class="text-sm text-gray-500">/mo</span></p>
-                    <p class="text-gray-400 mb-6">AI Agent Marketplace</p>
-                    <div class="flex flex-col gap-3">
-                        <a href="https://shopifysuperhero.com" class="btn-tertiary text-center">Visit Site →</a>
-                        <a href="https://shopifysuperhero.com" class="btn-primary text-white text-center">Get Started →</a>
-                    </div>
-                </div>
-
-                <!-- Product 3: SEOAISuperHero -->
-                <div class="product-card">
-                    <div class="icon-circle">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 21H3V3h9V1H3a2 2 0 00-2 2v18a2 2 0 002 2h18a2 2 0 002-2v-9h-2v9z"></path>
-                            <path d="M23 1h-6v2h3.59L9.29 13.29l1.42 1.42L21 4.41V8h2V1z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">SEOAI<span class="italic">SuperHero</span></h3>
-                    <p class="text-2xl font-bold mb-3 text-gray-300">$19.99<span class="text-sm text-gray-500">/mo</span></p>
-                    <p class="text-gray-400 mb-6">AI SEO audits + rank tracking</p>
-                    <div class="flex flex-col gap-3">
-                        <a href="https://seoaisuperhero.com" class="btn-tertiary text-center">Visit Site →</a>
-                        <a href="https://buy.stripe.com/8x2fZgfvA7E7csqgYwfbq02" class="btn-primary text-white text-center">Subscribe →</a>
-                    </div>
-                </div>
-
-                <!-- Product 4: MCPSuperHero -->
-                <div class="product-card">
-                    <div class="icon-circle">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">MCP<span class="italic">SuperHero</span></h3>
-                    <p class="text-2xl font-bold mb-3 text-gray-300">$9.99<span class="text-sm text-gray-500">/mo</span></p>
-                    <p class="text-gray-400 mb-6">MCP monitoring + analytics</p>
-                    <div class="flex flex-col gap-3">
-                        <a href="https://mcpsuperhero.com" class="btn-tertiary text-center">Visit Site →</a>
-                        <a href="https://buy.stripe.com/dRm8wO4QW4rV6424bKfbq03" class="btn-primary text-white text-center">Subscribe →</a>
-                    </div>
-                </div>
-
-                <!-- Product 5: TheAISuperHeroes Hub -->
-                <div class="product-card">
-                    <div class="icon-circle">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">TheAI<span class="italic">SuperHeroes</span></h3>
-                    <p class="text-2xl font-bold mb-3 text-gray-300">Free</p>
-                    <p class="text-gray-400 mb-6">Central hub for all 5 products</p>
-                    <div class="flex flex-col gap-3">
-                        <button class="btn-tertiary text-center" disabled>Current Site</button>
-                        <button class="btn-primary text-white text-center" disabled>Already Here</button>
+                    <div class="mock-main">
+                        <div class="mock-stat-row">
+                            <div class="mock-stat">
+                                <div class="mock-stat-label">Active Products</div>
+                                <div class="mock-stat-value yellow">4</div>
+                            </div>
+                            <div class="mock-stat">
+                                <div class="mock-stat-label">Total Users</div>
+                                <div class="mock-stat-value teal">30K+</div>
+                            </div>
+                            <div class="mock-stat">
+                                <div class="mock-stat-label">AI Powered</div>
+                                <div class="mock-stat-value purple">✓</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Why Choose Us -->
-    <section id="why-us" class="py-24 md:py-32 bg-gradient-to-br from-gray-900 to-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">Why Choose Us</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    Discover what makes our AI suite the choice of thousands.
-                </p>
+    <!-- Products -->
+    <section class="section" id="products">
+        <div class="section-label">Products</div>
+        <div class="section-title">Four <em>SuperHero</em> products for your business</div>
+        <div class="section-desc">Each product is built to solve a specific business challenge. Together, they create the complete AI toolkit.</div>
+
+        <div class="products-grid">
+            <div class="product-card orange">
+                <div class="product-header">
+                    <div>
+                        <div class="product-title">Resume <span class="italic">SuperHero</span></div>
+                        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 4px;">Career optimization</p>
+                    </div>
+                    <div class="price-badge">$9.99/mo</div>
+                </div>
+                <p class="product-desc">AI-powered resume optimization, interview coaching, and salary negotiation. Get hired 3x faster with job-matched resumes and real-time interview feedback.</p>
+                <a href="https://resumesuperhero.com" class="product-cta">Learn More →</a>
             </div>
 
-            <!-- Value Props Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Value 1 -->
-                <div class="value-card">
-                    <div class="mb-4">
-                        <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
+            <div class="product-card teal">
+                <div class="product-header">
+                    <div>
+                        <div class="product-title">Shopify <span class="italic">SuperHero</span></div>
+                        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 4px;">AI agent marketplace</p>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">One Platform</h3>
-                    <p class="text-gray-400 text-sm">Multiple tools, unified experience</p>
+                    <div class="price-badge">$14.99/mo</div>
                 </div>
+                <p class="product-desc">AI agents that automate your entire Shopify store. Product photography, copywriting, email campaigns, and customer support — all handled by AI.</p>
+                <a href="https://shopifysuperhero.com" class="product-cta">Learn More →</a>
+            </div>
 
-                <!-- Value 2 -->
-                <div class="value-card">
-                    <div class="mb-4">
-                        <svg class="w-8 h-8 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path>
-                        </svg>
+            <div class="product-card purple">
+                <div class="product-header">
+                    <div>
+                        <div class="product-title">SEOAi <span class="italic">SuperHero</span></div>
+                        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 4px;">AI SEO automation</p>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">AI-First Design</h3>
-                    <p class="text-gray-400 text-sm">Built from the ground up for AI</p>
+                    <div class="price-badge">$19.99/mo</div>
                 </div>
+                <p class="product-desc">Dominate search results with AI-powered SEO. Content generation, keyword research, competitor analysis, and rank tracking — all automated.</p>
+                <a href="https://seoaisuperhero.com" class="product-cta">Learn More →</a>
+            </div>
 
-                <!-- Value 3 -->
-                <div class="value-card">
-                    <div class="mb-4">
-                        <svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-                        </svg>
+            <div class="product-card red">
+                <div class="product-header">
+                    <div>
+                        <div class="product-title">MCP <span class="italic">SuperHero</span></div>
+                        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 4px;">AI connections hub</p>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">Free Replit Perk</h3>
-                    <p class="text-gray-400 text-sm">1 month free with any subscription</p>
+                    <div class="price-badge">$9.99/mo</div>
                 </div>
-
-                <!-- Value 4 -->
-                <div class="value-card">
-                    <div class="mb-4">
-                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">Expert Support</h3>
-                    <p class="text-gray-400 text-sm">Dedicated team ready to help</p>
-                </div>
+                <p class="product-desc">40,000+ AI connections in one place. Connect any AI tool to any service. The universal AI integration layer for your entire tech stack.</p>
+                <a href="https://mcpsuperhero.com" class="product-cta">Learn More →</a>
             </div>
         </div>
     </section>
 
     <!-- How It Works -->
-    <section class="py-24 md:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">How It Works</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    Get started in three simple steps.
-                </p>
+    <section class="section" id="how-it-works">
+        <div class="section-label">How It Works</div>
+        <div class="section-title">Three steps to <em>AI SuperPowers</em></div>
+        <div class="section-desc">Get started in minutes and scale your business with AI.</div>
+
+        <div class="workflow-step">
+            <div class="wf-text">
+                <div class="wf-number yellow">1</div>
+                <h3>Choose Your SuperPower</h3>
+                <p>Pick the AI tool for your specific business need. Whether you're optimizing careers, automating e-commerce, dominating search, or building AI integrations — we have you covered.</p>
             </div>
-
-            <!-- Steps Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                <!-- Step 1 -->
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3 class="text-2xl font-bold mb-3">Choose Your Tool</h3>
-                    <p class="text-gray-400">
-                        Browse our suite and pick the AI tools that match your business needs.
-                    </p>
+            <div class="wf-visual">
+                <div class="wf-visual-inner">
+                    <div class="big-icon">🎯</div>
+                    <p>Select from 4 products<br>Pick what fits your goals</p>
                 </div>
+            </div>
+        </div>
 
-                <!-- Step 2 -->
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3 class="text-2xl font-bold mb-3">Subscribe</h3>
-                    <p class="text-gray-400">
-                        Start your subscription and unlock full access to powerful AI features.
-                    </p>
+        <div class="workflow-step reverse">
+            <div class="wf-text">
+                <div class="wf-number teal">2</div>
+                <h3>Activate AI Agents</h3>
+                <p>Get started in 60 seconds. No complex setup or technical knowledge required. Our AI agents are ready to work for you immediately, automating tasks that would take hours.</p>
+            </div>
+            <div class="wf-visual">
+                <div class="wf-visual-inner">
+                    <div class="big-icon">⚡</div>
+                    <p>60-second setup<br>AI ready to go</p>
                 </div>
+            </div>
+        </div>
 
-                <!-- Step 3 -->
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3 class="text-2xl font-bold mb-3">Get Free Replit</h3>
-                    <p class="text-gray-400">
-                        Receive 1 month of free Replit access with every subscription.
-                    </p>
+        <div class="workflow-step">
+            <div class="wf-text">
+                <div class="wf-number purple">3</div>
+                <h3>Scale Everything</h3>
+                <p>Watch your business grow. With AI handling repetitive tasks, you get more time for strategy. See results in days, not months.</p>
+            </div>
+            <div class="wf-visual">
+                <div class="wf-visual-inner">
+                    <div class="big-icon">📈</div>
+                    <p>Grow with AI<br>Results in days</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Testimonials -->
-    <section class="py-24 md:py-32 bg-gradient-to-br from-gray-900 to-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">Trusted by Professionals</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    See what our users are saying about TheAISuperHeroes suite.
-                </p>
-            </div>
+    <section class="section" id="testimonials">
+        <div class="testimonials-header">
+            <div class="section-label">Testimonials</div>
+            <div class="section-title" style="margin: 0 auto 16px; text-align: center;">Loved by <em>builders everywhere</em></div>
+        </div>
 
-            <!-- Testimonials Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                <!-- Testimonial 1 -->
-                <div class="testimonial-card">
-                    <div class="mb-4">
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-6">
-                        "TheAISuperHeroes suite completely transformed how I approach my career. The tools are intuitive and the results speak for themselves."
-                    </p>
-                    <div>
-                        <p class="font-bold">Sarah Johnson</p>
-                        <p class="text-sm text-gray-400">Product Manager</p>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="testimonial-card">
-                    <div class="mb-4">
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-6">
-                        "I've tried other AI tools, but this suite is unmatched. The integration across products is seamless and the support is outstanding."
-                    </p>
-                    <div>
-                        <p class="font-bold">Michael Chen</p>
-                        <p class="text-sm text-gray-400">Entrepreneur</p>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="testimonial-card">
-                    <div class="mb-4">
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-6">
-                        "The free Replit perk alone makes this worth it. Combined with the powerful AI features, it's an incredible value."
-                    </p>
-                    <div>
-                        <p class="font-bold">Emily Rodriguez</p>
-                        <p class="text-sm text-gray-400">Developer</p>
+        <div class="test-grid">
+            <div class="t-card">
+                <div class="t-stars">★★★★★</div>
+                <p class="t-quote">"Resume SuperHero got me 3 interviews in the first week. This tool actually works."</p>
+                <div class="t-author">
+                    <div class="t-avatar" style="background: var(--teal); color: var(--black);">SM</div>
+                    <div class="t-info">
+                        <h4>Sarah Mitchell</h4>
+                        <span>Product Manager</span>
                     </div>
                 </div>
             </div>
+            <div class="t-card">
+                <div class="t-stars">★★★★★</div>
+                <p class="t-quote">"Shopify SuperHero automated my entire product copywriting. Saved me 40 hours a month."</p>
+                <div class="t-author">
+                    <div class="t-avatar" style="background: var(--purple); color: var(--black);">JC</div>
+                    <div class="t-info">
+                        <h4>James Chen</h4>
+                        <span>E-commerce Founder</span>
+                    </div>
+                </div>
+            </div>
+            <div class="t-card">
+                <div class="t-stars">★★★★★</div>
+                <p class="t-quote">"SEOAi SuperHero took our blog from 0 to 50K monthly visitors in 3 months. Incredible ROI."</p>
+                <div class="t-author">
+                    <div class="t-avatar" style="background: var(--pink); color: var(--black);">AP</div>
+                    <div class="t-info">
+                        <h4>Aisha Patel</h4>
+                        <span>Content Entrepreneur</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ai-Ai Referral Hub -->
+    <section class="referral" id="referral">
+        <h2 class="ref-title">Refer and <em>Earn</em></h2>
+        <p class="ref-subtitle">Earn 80% Ai-Ai commission across ALL SuperHero products. Refer any product, earn on all of them.</p>
+
+        <div class="ref-stats">
+            <div class="ref-stat">
+                <div class="ref-stat-num">80%</div>
+                <div class="ref-stat-label">Recurring Commission</div>
+            </div>
+            <div class="ref-stat">
+                <div class="ref-stat-num">∞</div>
+                <div class="ref-stat-label">Lifetime Value</div>
+            </div>
+            <div class="ref-stat">
+                <div class="ref-stat-num">4</div>
+                <div class="ref-stat-label">Products to Promote</div>
+            </div>
+        </div>
+
+        <p style="color: var(--gray); margin-bottom: 28px;">You earn 80% commission on every product referral. When you refer someone to Resume SuperHero and they subscribe, you earn 80% of the monthly fee forever. Same for all four products. Build your AI business portfolio with us.</p>
+
+        <div class="ref-ctas">
+            <a href="https://theaisuperheroes.com/referral" class="btn-cta btn-cta-accent">Start Referring →</a>
+            <a href="https://theaisuperheroes.com/referral-details" class="btn-outline">View Details</a>
         </div>
     </section>
 
     <!-- FAQ -->
-    <section class="py-24 md:py-32">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">Frequently Asked Questions</h2>
-                <p class="text-gray-400">
-                    Find answers to common questions about our products and services.
-                </p>
+    <section class="section" id="faq">
+        <div class="section-label">Questions</div>
+        <div class="section-title">Common <em>questions</em> about TheAi SuperHeroes</div>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    <span>What is TheAi SuperHeroes?</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">TheAi SuperHeroes is a parent brand housing four powerful AI products: Resume SuperHero, Shopify SuperHero, SEOAi SuperHero, and MCP SuperHero. Each product solves a specific business challenge, and together they create the complete AI toolkit for modern businesses.</div>
+                </div>
             </div>
 
-            <!-- Accordion -->
-            <div class="space-y-4">
-
-                <!-- FAQ Item 1 -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>Can I use multiple products at once?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p class="text-gray-400">
-                            Yes! You can subscribe to any combination of our products. Each subscription is independent, and you'll get the free Replit perk with each one.
-                        </p>
-                    </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    <span>Can I use multiple SuperHero products?</span>
+                    <span class="arrow">▼</span>
                 </div>
-
-                <!-- FAQ Item 2 -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>How does the free Replit perk work?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p class="text-gray-400">
-                            When you subscribe to any of our products, you'll receive a promo code for 1 month of free Replit access. Redeem it directly on the Replit platform.
-                        </p>
-                    </div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Absolutely! Many users subscribe to multiple products depending on their needs. Career professionals use Resume SuperHero. E-commerce founders use Shopify SuperHero. Content creators use SEOAi SuperHero. And developers use MCP SuperHero for AI integrations. You can mix and match based on your business goals.</div>
                 </div>
+            </div>
 
-                <!-- FAQ Item 3 -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>Can I cancel my subscription anytime?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p class="text-gray-400">
-                            Absolutely. You can cancel your subscription at any time, no questions asked. Your access will continue until the end of your current billing cycle.
-                        </p>
-                    </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    <span>What's included in each product?</span>
+                    <span class="arrow">▼</span>
                 </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>What payment methods do you accept?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p class="text-gray-400">
-                            We accept all major credit and debit cards through Stripe. Your payment information is processed securely.
-                        </p>
-                    </div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Each product includes a complete suite of AI tools and features. Resume SuperHero includes resume builder, interview coach, and salary negotiator. Shopify SuperHero includes AI agents for copywriting, product photos, and customer support. SEOAi SuperHero includes content generation, keyword research, and rank tracking. MCP SuperHero includes 40K+ AI connections. Check individual product pages for detailed feature lists.</div>
                 </div>
+            </div>
 
-                <!-- FAQ Item 5 -->
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">
-                        <span>What are the benefits of monthly subscriptions?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p class="text-gray-400">
-                            Our flexible monthly subscriptions let you cancel anytime, upgrade instantly, and access all features immediately. No long-term commitments—just pay for what you use month to month.
-                        </p>
-                    </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    <span>How do the referral commissions work?</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">You earn 80% recurring commission on every referral. If someone subscribes to Resume SuperHero at $9.99/month through your referral link, you earn $7.99 every month they remain subscribed. Same for all four products. The commission continues as long as they stay a customer. There's no cap on how much you can earn.</div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                    <span>Is there a free trial?</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="faq-a">
+                    <div class="faq-a-inner">Yes! We offer a 1-month free trial on all products (available through Replit). No credit card required. Cancel anytime with zero questions asked. Try any product risk-free and see the results before committing.</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-24 md:py-32 bg-gradient-to-r from-blue-600/10 to-purple-600/10">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Transform Your Business?</h2>
-            <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-                Choose the AI tools that power your success. Thousands of professionals are already seeing incredible results.
-            </p>
-            <a href="#products" class="btn-primary text-white inline-block">
-                Explore All Products →
-            </a>
-        </div>
-    </section>
+    <!-- Sticky Bottom CTA -->
+    <div class="sticky-bar">
+        <span class="sticky-bar-text">Ready to unlock AI SuperPowers?</span>
+        <a href="#products">Explore our AI toolkit →</a>
+    </div>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-gradient-to-b from-transparent to-gray-900/50 border-t border-gray-800 py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Footer Links -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-
-                <!-- Column 1: Brand -->
-                <div>
-                    <h3 class="text-lg font-bold mb-6">TheAISuperHeroes</h3>
-                    <p class="text-gray-400 mb-6">
-                        Your complete suite of AI-powered business tools. Five products. One mission.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition">Twitter</a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">LinkedIn</a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">GitHub</a>
-                    </div>
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="var(--orange)" stroke="var(--orange)"/>
+                    </svg>
+                    <span>TheAi <span class="italic">SuperHeroes</span></span>
                 </div>
-
-                <!-- Column 2: Products -->
-                <div>
-                    <h4 class="font-bold mb-6">Our Products</h4>
-                    <ul class="space-y-3">
-                        <li><a href="https://resumesuperhero.com" class="text-gray-400 hover:text-white transition">ResumeSuperHero</a></li>
-                        <li><a href="https://shopifysuperhero.com" class="text-gray-400 hover:text-white transition">ShopifySuperHero</a></li>
-                        <li><a href="https://seoaisuperhero.com" class="text-gray-400 hover:text-white transition">SEOAISuperHero</a></li>
-                        <li><a href="https://mcpsuperhero.com" class="text-gray-400 hover:text-white transition">MCPSuperHero</a></li>
-                    </ul>
-                </div>
-
-                <!-- Column 3: Company -->
-                <div>
-                    <h4 class="font-bold mb-6">Company</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#why-us" class="text-gray-400 hover:text-white transition">About Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
-                    </ul>
-                </div>
+                <p class="footer-desc">Four AI products, one mission: to empower every business with artificial intelligence. Built for creators, founders, and teams.</p>
             </div>
-
-            <!-- Footer Bottom -->
-            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
-                <p class="text-gray-400 text-sm">
-                    &copy; 2026 TheAISuperHeroes. All rights reserved.
-                </p>
-                <a href="mailto:partners@theaisuperheroes.com" class="text-gray-400 hover:text-white transition text-sm">
-                    partners@theaisuperheroes.com
-                </a>
+            <div>
+                <h4>Products</h4>
+                <a href="https://resumesuperhero.com">Resume SuperHero</a>
+                <a href="https://shopifysuperhero.com">Shopify SuperHero</a>
+                <a href="https://seoaisuperhero.com">SEOAi SuperHero</a>
+                <a href="https://mcpsuperhero.com">MCP SuperHero</a>
             </div>
+            <div>
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Status</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 TheAi SuperHeroes. All rights reserved.</span>
+            <span>GTM-P2C3KN7T · GA4: G-RVV7C7Y5YY</span>
         </div>
     </footer>
 
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content" style="padding: 32px;">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" onclick="document.getElementById('loginModal').classList.remove('show')">✕</button>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button class="btn-cta btn-cta-accent" style="width: 100%; justify-content: center;">Sign In</button>
+            <p style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--gray);">
+                Don't have an account? <a href="#" style="color: var(--orange); font-weight: 600;">Create one</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Close modal on outside click -->
     <script>
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('menu-btn');
-
-        // Accordion Toggle
-        function toggleAccordion(button) {
-            const item = button.closest('.accordion-item');
-            const isActive = item.classList.contains('active');
-
-            // Close all other items
-            document.querySelectorAll('.accordion-item.active').forEach(el => {
-                if (el !== item) {
-                    el.classList.remove('active');
-                }
-            });
-
-            // Toggle current item
-            item.classList.toggle('active');
-        }
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target.id === 'loginModal') {
+                document.getElementById('loginModal').classList.remove('show');
+            }
         });
     </script>
 </body>
