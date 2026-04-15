@@ -456,14 +456,21 @@
             <p>SuperHero Network Dashboard</p>
             <form class="login-form" id="loginForm">
                 <input
+                    type="text"
+                    id="usernameInput"
+                    placeholder="Username"
+                    required
+                    style="margin-bottom: 12px;"
+                >
+                <input
                     type="password"
                     id="passwordInput"
-                    placeholder="Enter password"
+                    placeholder="Password"
                     required
                 >
                 <button type="submit">Sign In</button>
             </form>
-            <div class="login-error" id="loginError">Invalid password. Try again.</div>
+            <div class="login-error" id="loginError">Invalid credentials. Try again.</div>
         </div>
     </div>
 
@@ -557,39 +564,36 @@
         // Sites array
         const SITES = [
             { name: 'TheAISuperHeroes.com', url: 'https://theaisuperheroes.com' },
-            { name: 'SuperHero.com', url: 'https://superhero.com' },
+            { name: 'ResumeSuperHero.com', url: 'https://resumesuperhero.com' },
+            { name: 'ShopifySuperHero.com', url: 'https://shopifysuperhero.com' },
+            { name: 'SEOAISuperHero.com', url: 'https://seoaisuperhero.com' },
+            { name: 'MCPSuperHero.com', url: 'https://mcpsuperhero.com' },
             { name: 'ReplitSuperHero.com', url: 'https://replitsuperhero.com' },
             { name: 'ClaudSuperHero.com', url: 'https://claudsuperhero.com' },
             { name: 'AgenticSuperHero.com', url: 'https://agenticsuperhero.com' },
-            { name: 'ShopifySuperHero.com', url: 'https://shopifysuperhero.com' },
+            { name: 'URLSuperHero.com', url: 'https://urlsuperhero.com' },
             { name: 'StartBizSuperHero.com', url: 'https://startbizsuperhero.com' }
         ];
 
-        // Mock data for fallback
-        const MOCK_LEADS = [
-            { name: 'John Anderson', email: 'john.anderson@example.com', source: 'TheAISuperHeroes.com', date: '2026-04-15', status: 'new' },
-            { name: 'Sarah Mitchell', email: 'sarah.m@company.com', source: 'SuperHero.com', date: '2026-04-14', status: 'contacted' },
-            { name: 'Michael Chen', email: 'mchen@tech.io', source: 'ReplitSuperHero.com', date: '2026-04-13', status: 'new' },
-            { name: 'Emma Rodriguez', email: 'emma.r@startup.co', source: 'ClaudSuperHero.com', date: '2026-04-12', status: 'converted' },
-            { name: 'David Kumar', email: 'david.kumar@business.com', source: 'AgenticSuperHero.com', date: '2026-04-11', status: 'contacted' },
-            { name: 'Lisa Wong', email: 'lisa.wong@enterprise.net', source: 'ShopifySuperHero.com', date: '2026-04-10', status: 'new' },
-            { name: 'James Taylor', email: 'jtaylor@digital.com', source: 'ToolPilot.ai', date: '2026-04-09', status: 'new' },
-            { name: 'Sophie Martin', email: 'sophie@growth.co', source: 'HostingSuperHero.com', date: '2026-04-08', status: 'contacted' }
-        ];
+        // Empty fallback when API is unavailable
+        const MOCK_LEADS = [];
 
         // Login handler
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
+            const username = document.getElementById('usernameInput').value;
             const password = document.getElementById('passwordInput').value;
 
-            if (password === 'superhero2026') {
+            if (username === 'Jarvis.Stark1985' && password === 'Superhero2026$') {
                 isAuthenticated = true;
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('usernameInput').value = '';
                 document.getElementById('passwordInput').value = '';
                 initDashboard();
             } else {
                 document.getElementById('loginError').style.display = 'block';
+                document.getElementById('usernameInput').value = '';
                 document.getElementById('passwordInput').value = '';
                 setTimeout(() => {
                     document.getElementById('loginError').style.display = 'none';
@@ -602,6 +606,7 @@
             isAuthenticated = false;
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('usernameInput').value = '';
             document.getElementById('passwordInput').value = '';
         });
 
@@ -620,8 +625,8 @@
                 leadsData = await response.json();
                 if (!Array.isArray(leadsData)) leadsData = [];
             } catch (error) {
-                console.warn('Failed to fetch leads, using mock data:', error);
-                leadsData = MOCK_LEADS;
+                console.warn('Failed to fetch leads from API:', error);
+                leadsData = [];
             }
 
             updateStats();
