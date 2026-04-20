@@ -857,7 +857,7 @@
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">When and how do I get paid?</div>
-      <div class="faq-a">Payouts are monthly, NET-30 from the date of conversion. Minimum payout is $25. We support PayPal and direct bank transfer.</div>
+      <div class="faq-a">Payouts are monthly, NET-30 from the date of conversion. Minimum payout is $25. All commissions are paid via Stripe to your connected account.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">Do I need an audience to start?</div>
@@ -1021,7 +1021,7 @@
 <!-- FOOTER -->
 <div class="footer">
   <p>&copy; 2026 <a href="https://theaisuperheroes.com">The AI SuperHeroes</a> &nbsp;|&nbsp;
-  Payouts: Monthly, NET-30 &nbsp;|&nbsp; Minimum: $25 &nbsp;|&nbsp;
+  Payouts via Stripe: Monthly, NET-30 &nbsp;|&nbsp; Minimum: $25 &nbsp;|&nbsp;
   <a href="mailto:support@theaisuperheroes.com">Support</a></p>
 </div>
 
@@ -1324,7 +1324,7 @@
       alert('Minimum payout is $25.00. Current pending: $' + (pending / 100).toFixed(2));
       return;
     }
-    alert('Payout request submitted! You\'ll receive payment within 30 days.');
+    alert('Payout request submitted! Payment will be sent to your Stripe account within 30 days.');
   }
 
   function logout() {
