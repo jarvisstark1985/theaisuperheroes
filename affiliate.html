@@ -1025,10 +1025,52 @@
   <a href="mailto:support@theaisuperheroes.com">Support</a></p>
 </div>
 
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1600.0.min.js"></script>
 <script>
   // ===== CONFIG =====
   const API_BASE = 'https://api.theaisuperheroes.com/v1/affiliate';
   const USE_MOCK = true; // Set to false when Lambda API is live
+
+  // ===== S3 CONFIG =====
+  const S3_CONFIG = {
+    region: 'us-east-2',
+    cognitoIdentityPoolId: 'us-east-2:662dfd2a-8d86-4ee3-875b-cd55d0acff8d',
+    bucket: 'superhero-clients-theaisuperheroes',
+    prefix: 'affiliates/'
+  };
+
+  async function saveAffiliateToS3(affiliateData) {
+    try {
+      AWS.config.region = S3_CONFIG.region;
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId
+      });
+      await new Promise(function(resolve, reject) {
+        AWS.config.credentials.get(function(err) { err ? reject(err) : resolve(); });
+      });
+      var s3 = new AWS.S3({ region: S3_CONFIG.region });
+      var ts = new Date().toISOString().replace(/[:.]/g, '-');
+      var key = S3_CONFIG.prefix + affiliateData.email.replace(/[^a-zA-Z0-9]/g, '_') + '_' + ts + '.json';
+      var payload = Object.assign({}, affiliateData, {
+        _savedAt: new Date().toISOString(),
+        _source: 'affiliate-registration',
+        _domain: window.location.hostname
+      });
+      await new Promise(function(resolve, reject) {
+        s3.putObject({
+          Bucket: S3_CONFIG.bucket,
+          Key: key,
+          Body: JSON.stringify(payload),
+          ContentType: 'application/json'
+        }, function(err, data) { err ? reject(err) : resolve(data); });
+      });
+      console.log('Affiliate saved to S3:', key);
+      return true;
+    } catch (err) {
+      console.error('S3 save failed:', err);
+      return false;
+    }
+  }
 
   const PRODUCTS = [
     { key: 'urlsuperhero',      name: 'URL SuperHero',      domain: 'urlsuperhero.com',      price: '$17.99/mo', icon: 'URL' },
@@ -1123,6 +1165,24 @@
           conversions: []
         };
         localStorage.setItem('affiliate_session', JSON.stringify(user));
+        // Save to S3 for admin tracking
+        saveAffiliateToS3({
+          affiliate_id: user.affiliate_id,
+          name: payload.name,
+          first_name: payload.first_name,
+          last_name: payload.last_name,
+          email: payload.email,
+          phone: payload.phone,
+          street: payload.street,
+          city: payload.city,
+          state: payload.state,
+          zip: payload.zip,
+          type: payload.type,
+          website: payload.website,
+          referral_code: user.referral_code,
+          status: 'new',
+          created_at: new Date().toISOString()
+        });
         currentUser = user;
         showDashboard();
       } else {
