@@ -1039,7 +1039,8 @@
     prefix: 'affiliates/'
   };
 
-  async function saveAffiliateToS3(affiliateData) {
+  // Generic S3 save — works for any prefix (affiliates/, customers/, etc.)
+  async function saveToS3(prefix, data, source) {
     try {
       AWS.config.region = S3_CONFIG.region;
       AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -1050,10 +1051,11 @@
       });
       var s3 = new AWS.S3({ region: S3_CONFIG.region });
       var ts = new Date().toISOString().replace(/[:.]/g, '-');
-      var key = S3_CONFIG.prefix + affiliateData.email.replace(/[^a-zA-Z0-9]/g, '_') + '_' + ts + '.json';
-      var payload = Object.assign({}, affiliateData, {
+      var emailSlug = (data.email || 'unknown').replace(/[^a-zA-Z0-9]/g, '_');
+      var key = prefix + emailSlug + '_' + ts + '.json';
+      var payload = Object.assign({}, data, {
         _savedAt: new Date().toISOString(),
-        _source: 'affiliate-registration',
+        _source: source,
         _domain: window.location.hostname
       });
       await new Promise(function(resolve, reject) {
@@ -1064,12 +1066,20 @@
           ContentType: 'application/json'
         }, function(err, data) { err ? reject(err) : resolve(data); });
       });
-      console.log('Affiliate saved to S3:', key);
+      console.log(source + ' saved to S3:', key);
       return true;
     } catch (err) {
-      console.error('S3 save failed:', err);
+      console.error('S3 save failed (' + source + '):', err);
       return false;
     }
+  }
+
+  async function saveAffiliateToS3(affiliateData) {
+    return saveToS3('affiliates/', affiliateData, 'affiliate-registration');
+  }
+
+  async function saveCustomerToS3(customerData) {
+    return saveToS3('customers/', customerData, 'customer-signup');
   }
 
   const PRODUCTS = [
@@ -1165,8 +1175,8 @@
           conversions: []
         };
         localStorage.setItem('affiliate_session', JSON.stringify(user));
-        // Save to S3 for admin tracking
-        saveAffiliateToS3({
+        // Save to S3 for admin tracking — MUST succeed
+        var s3Saved = await saveAffiliateToS3({
           affiliate_id: user.affiliate_id,
           name: payload.name,
           first_name: payload.first_name,
@@ -1183,6 +1193,13 @@
           status: 'new',
           created_at: new Date().toISOString()
         });
+        if (!s3Saved) {
+          msg.className = 'msg msg-error';
+          msg.textContent = 'Registration failed to save. Please try again or contact support.';
+          btn.disabled = false;
+          btn.textContent = 'Create Affiliate Account';
+          return;
+        }
         currentUser = user;
         showDashboard();
       } else {
