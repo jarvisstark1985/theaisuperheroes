@@ -897,41 +897,13 @@
 
       <!-- Register Form -->
       <form id="registerForm" onsubmit="handleRegister(event)">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 16px;">
-          <div class="form-group">
-            <label>First Name *</label>
-            <input type="text" id="regFirstName" required placeholder="First name">
-          </div>
-          <div class="form-group">
-            <label>Last Name *</label>
-            <input type="text" id="regLastName" required placeholder="Last name">
-          </div>
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" id="regFirstName" required placeholder="First name">
         </div>
         <div class="form-group">
           <label>Email *</label>
           <input type="email" id="regEmail" required placeholder="you@example.com">
-        </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="regPhone" required placeholder="(555) 123-4567">
-        </div>
-        <div class="form-group">
-          <label>Street Address *</label>
-          <input type="text" id="regStreet" required placeholder="123 Main St, Apt 4B">
-        </div>
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:0 16px;">
-          <div class="form-group">
-            <label>City *</label>
-            <input type="text" id="regCity" required placeholder="City">
-          </div>
-          <div class="form-group">
-            <label>State *</label>
-            <input type="text" id="regState" required placeholder="ST" maxlength="2" style="text-transform:uppercase;">
-          </div>
-          <div class="form-group">
-            <label>ZIP *</label>
-            <input type="text" id="regZip" required placeholder="12345" maxlength="10">
-          </div>
         </div>
         <div class="form-group">
           <label>Password *</label>
@@ -947,10 +919,7 @@
             <option value="developer">Developer</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Website or Social (optional)</label>
-          <input type="text" id="regWebsite" placeholder="https://yoursite.com or @handle">
-        </div>
+        <p style="color:#666;font-size:0.8em;margin-bottom:14px;">You can add phone, address &amp; website later in your profile settings.</p>
         <button type="submit" class="btn-primary" id="regBtn">Create Affiliate Account</button>
       </form>
 
@@ -1146,17 +1115,10 @@
 
     var payload = {
       first_name: document.getElementById('regFirstName').value.trim(),
-      last_name: document.getElementById('regLastName').value.trim(),
-      name: document.getElementById('regFirstName').value.trim() + ' ' + document.getElementById('regLastName').value.trim(),
+      name: document.getElementById('regFirstName').value.trim(),
       email: document.getElementById('regEmail').value.trim().toLowerCase(),
-      phone: document.getElementById('regPhone').value.trim(),
-      street: document.getElementById('regStreet').value.trim(),
-      city: document.getElementById('regCity').value.trim(),
-      state: document.getElementById('regState').value.trim().toUpperCase(),
-      zip: document.getElementById('regZip').value.trim(),
       password: document.getElementById('regPassword').value,
-      type: document.getElementById('regType').value,
-      website: document.getElementById('regWebsite').value.trim()
+      type: document.getElementById('regType').value
     };
 
     // Track registration event
@@ -1180,15 +1142,8 @@
           affiliate_id: user.affiliate_id,
           name: payload.name,
           first_name: payload.first_name,
-          last_name: payload.last_name,
           email: payload.email,
-          phone: payload.phone,
-          street: payload.street,
-          city: payload.city,
-          state: payload.state,
-          zip: payload.zip,
           type: payload.type,
-          website: payload.website,
           referral_code: user.referral_code,
           status: 'new',
           created_at: new Date().toISOString()
