@@ -502,44 +502,64 @@
                     <div class="stat-meta">Past 7 days</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Sites</div>
-                    <div class="stat-value" id="totalSites">10</div>
-                    <div class="stat-meta">Active network</div>
+                    <div class="stat-label">Paying Customers</div>
+                    <div class="stat-value" id="totalCustomers" style="color:#4CAF50;">0</div>
+                    <div class="stat-meta">All time</div>
                 </div>
             </div>
 
-            <!-- Leads Section -->
-            <h2 class="section-title">Affiliate Registrations</h2>
-
-            <div class="search-container">
-                <input
-                    type="text"
-                    class="search-input"
-                    id="searchInput"
-                    placeholder="Search by site name or email..."
-                >
+            <!-- Tab Navigation -->
+            <div style="display:flex;gap:0;margin-bottom:0;">
+                <button id="tabAffiliates" onclick="switchTab('affiliates')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#FF6B35;color:#fff;transition:all .2s;">Affiliates</button>
+                <button id="tabCustomers" onclick="switchTab('customers')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">Paying Customers</button>
             </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(0)">Name</th>
-                            <th onclick="sortTable(1)">Email</th>
-                            <th onclick="sortTable(2)">Type</th>
-                            <th onclick="sortTable(3)">Date</th>
-                            <th onclick="sortTable(4)">Status</th>
-                            <th>Referral Code</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leadsTableBody">
-                        <tr>
-                            <td colspan="5" class="loading">
-                                <span class="spinner"></span> Loading leads...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Affiliates Section -->
+            <div id="sectionAffiliates">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search affiliates by name, email, or code...">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Name</th>
+                                <th onclick="sortTable(1)">Email</th>
+                                <th onclick="sortTable(2)">Type</th>
+                                <th onclick="sortTable(3)">Date</th>
+                                <th onclick="sortTable(4)">Status</th>
+                                <th>Referral Code</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsTableBody">
+                            <tr><td colspan="6" class="loading"><span class="spinner"></span> Loading affiliates...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Customers Section -->
+            <div id="sectionCustomers" style="display:none;">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="customerSearchInput" placeholder="Search customers by name, email, or product...">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortCustomerTable(0)">Name</th>
+                                <th onclick="sortCustomerTable(1)">Email</th>
+                                <th onclick="sortCustomerTable(2)">Product</th>
+                                <th onclick="sortCustomerTable(3)">Plan</th>
+                                <th onclick="sortCustomerTable(4)">Date</th>
+                                <th onclick="sortCustomerTable(5)">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <tr><td colspan="6" class="loading"><span class="spinner"></span> Loading customers...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Sites Overview -->
@@ -563,12 +583,15 @@
             region: 'us-east-2',
             cognitoIdentityPoolId: 'us-east-2:662dfd2a-8d86-4ee3-875b-cd55d0acff8d',
             bucket: 'superhero-clients-theaisuperheroes',
-            affiliatePrefix: 'affiliates/'
+            affiliatePrefix: 'affiliates/',
+            customerPrefix: 'customers/'
         };
 
         // Global auth state
         let isAuthenticated = false;
         let leadsData = [];
+        let customersData = [];
+        let activeTab = 'affiliates';
         let currentSort = { column: 0, ascending: true };
 
         // Sites array
@@ -620,9 +643,20 @@
             document.getElementById('passwordInput').value = '';
         });
 
+        // Tab switching
+        function switchTab(tab) {
+            activeTab = tab;
+            document.getElementById('sectionAffiliates').style.display = tab === 'affiliates' ? 'block' : 'none';
+            document.getElementById('sectionCustomers').style.display = tab === 'customers' ? 'block' : 'none';
+            document.getElementById('tabAffiliates').style.background = tab === 'affiliates' ? '#FF6B35' : '#1E1E1E';
+            document.getElementById('tabAffiliates').style.color = tab === 'affiliates' ? '#fff' : '#888';
+            document.getElementById('tabCustomers').style.background = tab === 'customers' ? '#4CAF50' : '#1E1E1E';
+            document.getElementById('tabCustomers').style.color = tab === 'customers' ? '#fff' : '#888';
+        }
+
         // Initialize dashboard
         async function initDashboard() {
-            await fetchLeads();
+            await Promise.all([fetchLeads(), fetchCustomers()]);
             renderSites();
             setupSearch();
         }
@@ -690,6 +724,98 @@
             renderLeads();
         }
 
+        // Fetch paying customers from S3
+        async function fetchCustomers() {
+            try {
+                AWS.config.region = S3_CONFIG.region;
+                AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                    IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId
+                });
+                await new Promise((resolve, reject) => {
+                    AWS.config.credentials.get(err => err ? reject(err) : resolve());
+                });
+                const s3 = new AWS.S3({ region: S3_CONFIG.region });
+                const listResult = await new Promise((resolve, reject) => {
+                    s3.listObjectsV2({
+                        Bucket: S3_CONFIG.bucket,
+                        Prefix: S3_CONFIG.customerPrefix,
+                        MaxKeys: 1000
+                    }, (err, data) => err ? reject(err) : resolve(data));
+                });
+                const files = (listResult.Contents || []).filter(f => f.Key.endsWith('.json'));
+                console.log('Found ' + files.length + ' customer records in S3');
+                const records = [];
+                for (const file of files) {
+                    try {
+                        const obj = await new Promise((resolve, reject) => {
+                            s3.getObject({ Bucket: S3_CONFIG.bucket, Key: file.Key },
+                                (err, data) => err ? reject(err) : resolve(data));
+                        });
+                        const record = JSON.parse(obj.Body.toString());
+                        records.push({
+                            name: record.name || ((record.first_name || '') + ' ' + (record.last_name || '')).trim() || 'Unknown',
+                            email: record.email || '',
+                            product: record.product || record.plan_name || '',
+                            plan: record.plan || record.billing_cycle || '',
+                            date: record.created_at ? record.created_at.split('T')[0] : (record._savedAt ? record._savedAt.split('T')[0] : ''),
+                            status: record.status || 'active',
+                            amount: record.amount || '',
+                            referral_code: record.referral_code || ''
+                        });
+                    } catch (e) {
+                        console.warn('Failed to read customer:', file.Key, e);
+                    }
+                }
+                customersData = records;
+            } catch (error) {
+                console.warn('Failed to fetch customers from S3:', error);
+                customersData = [];
+            }
+            updateStats();
+            renderCustomers();
+        }
+
+        // Render customers table
+        function renderCustomers(filterText = '') {
+            const tbody = document.getElementById('customersTableBody');
+            let filtered = customersData;
+            if (filterText) {
+                const s = filterText.toLowerCase();
+                filtered = customersData.filter(c =>
+                    (c.name || '').toLowerCase().includes(s) ||
+                    (c.email || '').toLowerCase().includes(s) ||
+                    (c.product || '').toLowerCase().includes(s)
+                );
+            }
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#666;">No paying customers yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = filtered.map(c => `
+                <tr>
+                    <td>${c.name}</td>
+                    <td>${c.email}</td>
+                    <td>${c.product}</td>
+                    <td>${c.plan}</td>
+                    <td>${c.date}</td>
+                    <td><span class="status-badge status-${c.status}" style="background:${c.status==='active'?'rgba(76,175,80,0.15)':'rgba(255,107,53,0.15)'};color:${c.status==='active'?'#4CAF50':'#FF6B35'};">${c.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Sort customer table
+        let customerSort = { column: 0, ascending: true };
+        function sortCustomerTable(col) {
+            if (customerSort.column === col) { customerSort.ascending = !customerSort.ascending; }
+            else { customerSort.column = col; customerSort.ascending = true; }
+            const keys = ['name','email','product','plan','date','status'];
+            customersData.sort((a, b) => {
+                const av = a[keys[col]] || '', bv = b[keys[col]] || '';
+                return customerSort.ascending ? av.localeCompare(bv) : bv.localeCompare(av);
+            });
+            renderCustomers(document.getElementById('customerSearchInput').value);
+        }
+
         // Update stats cards
         function updateStats() {
             const today = new Date().toISOString().split('T')[0];
@@ -701,7 +827,7 @@
             document.getElementById('totalLeads').textContent = leadsData.length;
             document.getElementById('leadsToday').textContent = leadsToday;
             document.getElementById('leadsWeek').textContent = leadsWeek;
-            document.getElementById('totalSites').textContent = SITES.length;
+            document.getElementById('totalCustomers').textContent = customersData.length;
         }
 
         // Render leads table
@@ -779,6 +905,9 @@
         function setupSearch() {
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 renderLeads(e.target.value);
+            });
+            document.getElementById('customerSearchInput').addEventListener('input', (e) => {
+                renderCustomers(e.target.value);
             });
         }
 
