@@ -771,5 +771,84 @@
             }
         }
     </script>
+
+<script src="https://www.theaisuperheroes.com/referral-tracking.js"></script>
+
+<!-- Referral Code Auto-Capture -->
+<script>
+(function() {
+  // Read referral code from cookie or localStorage
+  function getRefCode() {
+    // Cookie
+    var match = document.cookie.match(/(^| )sh_ref=([^;]+)/);
+    if (match) return decodeURIComponent(match[2]);
+    // localStorage fallback
+    try {
+      var code = localStorage.getItem('sh_ref');
+      var time = parseInt(localStorage.getItem('sh_ref_time') || '0');
+      if (code && (Date.now() - time) < 30*24*60*60*1000) return code;
+    } catch(e) {}
+    // URL param fallback
+    try {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('ref')) return p.get('ref');
+    } catch(e) {}
+    return null;
+  }
+
+  var refCode = getRefCode();
+
+  // Auto-populate any referral code field and show referral banner
+  document.addEventListener('DOMContentLoaded', function() {
+    // If there's a ref code, inject a visible banner and hidden field
+    if (refCode) {
+      // Add referral banner at top of page
+      var banner = document.createElement('div');
+      banner.style.cssText = 'background:linear-gradient(135deg,#1a0f0a,#1a1a2e);border:1px solid #FF6B35;color:#FF6B35;text-align:center;padding:10px 16px;font-size:0.85rem;font-family:system-ui,sans-serif;position:sticky;top:0;z-index:9999;';
+      banner.innerHTML = 'Referred by affiliate: <strong>' + refCode + '</strong> — Welcome!';
+      document.body.insertBefore(banner, document.body.firstChild);
+
+      // Find all forms and add hidden referral_code field
+      var forms = document.querySelectorAll('form');
+      forms.forEach(function(form) {
+        // Add hidden input if not already present
+        if (!form.querySelector('input[name="referral_code"]')) {
+          var hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.name = 'referral_code';
+          hidden.value = refCode;
+          form.appendChild(hidden);
+        }
+      });
+
+      // Find any visible referral code input and populate it
+      var refInputs = document.querySelectorAll('input[name="referral_code"], input[id*="referral"], input[placeholder*="referral"], input[placeholder*="Referral"]');
+      refInputs.forEach(function(inp) {
+        inp.value = refCode;
+        inp.readOnly = true;
+        inp.style.borderColor = '#FF6B35';
+        inp.style.color = '#FF6B35';
+      });
+    }
+
+    // Patch saveClientData to include referral code
+    if (window.saveClientData) {
+      var originalSave = window.saveClientData;
+      window.saveClientData = function(data, filename) {
+        if (refCode && data && typeof data === 'object') {
+          data.referral_code = refCode;
+          data.referred_by = refCode;
+          data.referral_site = localStorage.getItem('sh_ref_site') || '';
+        }
+        return originalSave(data, filename);
+      };
+    }
+  });
+
+  // Expose for manual use
+  window._refCode = refCode;
+})();
+</script>
+
 </body>
 </html>
