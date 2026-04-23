@@ -1,9 +1,10 @@
 /**
- * SuperHero Identity Graph — v1.0
+ * SuperHero Identity Graph — v1.1
  * Tracks anonymous visitors with a fingerprint ID, links them to known
- * identities (affiliate/customer) on signup, stores visit history in S3.
+ * identities (affiliate/customer) on signup, stores visit history.
+ * Saves identity data to central S3 bucket (superhero-clients-theaisuperheroes)
+ * under identity-graph/ prefix for unified cross-site tracking.
  *
- * Drop on ALL 10 SuperHero websites alongside referral-tracking.js
  * Usage: <script src="https://www.theaisuperheroes.com/identity-graph.js"></script>
  */
 (function() {
@@ -14,6 +15,14 @@
   var SH_IDENTITY_KEY = 'sh_identity';
   var SH_FIRST_SEEN_KEY = 'sh_first_seen';
   var SH_SESSION_KEY = 'sh_session';
+
+  // Central S3 config for identity graph storage
+  var IDENTITY_S3 = {
+    region: 'us-east-2',
+    cognitoIdentityPoolId: 'us-east-2:662dfd2a-8d86-4ee3-875b-cd55d0acff8d',
+    bucket: 'superhero-clients-theaisuperheroes',
+    prefix: 'identity-graph/'
+  };
 
   // ===== Generate a unique visitor ID =====
   function generateVisitorId() {
@@ -77,13 +86,14 @@
       };
 
       // Add referral code if present
-      var refCode = null;
       try {
         var match = document.cookie.match(/(^| )sh_ref=([^;]+)/);
-        if (match) refCode = decodeURIComponent(match[2]);
-        else refCode = localStorage.getItem('sh_ref') || null;
+        if (match) visit.affiliate_ref = decodeURIComponent(match[2]);
+        else {
+          var code = localStorage.getItem('sh_ref');
+          if (code) visit.affiliate_ref = code;
+        }
       } catch(e) {}
-      if (refCode) visit.affiliate_ref = refCode;
 
       // UTM params
       try {
@@ -97,55 +107,49 @@
       } catch(e) {}
 
       visits.push(visit);
-
-      // Keep last 200 visits max (prevent localStorage bloat)
       if (visits.length > 200) visits = visits.slice(-200);
-
       localStorage.setItem(SH_VISITS_KEY, JSON.stringify(visits));
       return visit;
     } catch(e) { return null; }
   }
 
-  // ===== Link identity (called when user signs up / logs in) =====
-  function linkIdentity(identityData) {
+  // ===== Save identity graph to central S3 =====
+  function saveToS3(graphData) {
     try {
-      var identity = {
-        visitor_id: getVisitorId(),
-        linked_at: new Date().toISOString(),
-        type: identityData.type || 'unknown', // 'affiliate' or 'customer'
-        email: identityData.email || '',
-        name: identityData.name || '',
-        referral_code: identityData.referral_code || '',
-        affiliate_ref: identityData.affiliate_ref || localStorage.getItem('sh_ref') || '',
-        site: window.location.hostname.replace(/^www\./, '')
-      };
-
-      localStorage.setItem(SH_IDENTITY_KEY, JSON.stringify(identity));
-
-      // Save identity graph to S3 if saveClientData is available
-      if (window.saveClientData) {
-        var graphData = {
-          visitor_id: identity.visitor_id,
-          identity: identity,
-          first_seen: localStorage.getItem(SH_FIRST_SEEN_KEY) || '',
-          visit_count: getVisitHistory().length,
-          visit_history: getVisitHistory().slice(-50), // Last 50 visits
-          sites_visited: getUniqueSites(),
-          total_sessions: getUniqueSessions(),
-          device: {
-            screen: (screen.width || 0) + 'x' + (screen.height || 0),
-            language: navigator.language || '',
-            platform: navigator.platform || '',
-            touch: 'ontouchstart' in window
-          }
-        };
-
-        var filename = 'identity-graph/' + identity.visitor_id + '.json';
-        window.saveClientData(graphData, filename).catch(function() {});
+      // Load AWS SDK if needed
+      var sdkUrl = 'https://sdk.amazonaws.com/js/aws-sdk-2.1600.0.min.js';
+      function doSave() {
+        var AWS = window.AWS;
+        if (!AWS) return;
+        AWS.config.region = IDENTITY_S3.region;
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: IDENTITY_S3.cognitoIdentityPoolId
+        });
+        AWS.config.credentials.get(function(err) {
+          if (err) return;
+          var s3 = new AWS.S3({ region: IDENTITY_S3.region });
+          var key = IDENTITY_S3.prefix + graphData.visitor_id + '.json';
+          s3.putObject({
+            Bucket: IDENTITY_S3.bucket,
+            Key: key,
+            Body: JSON.stringify(graphData),
+            ContentType: 'application/json',
+            Metadata: { 'source': 'identity-graph', 'domain': window.location.hostname }
+          }, function(err) {
+            if (!err) console.log('[IdentityGraph] Saved to S3: ' + key);
+          });
+        });
       }
 
-      return identity;
-    } catch(e) { return null; }
+      if (window.AWS) {
+        doSave();
+      } else {
+        var script = document.createElement('script');
+        script.src = sdkUrl;
+        script.onload = doSave;
+        document.head.appendChild(script);
+      }
+    } catch(e) {}
   }
 
   // ===== Helper: unique sites visited =====
@@ -162,6 +166,47 @@
     var sessions = {};
     visits.forEach(function(v) { if (v.session) sessions[v.session] = true; });
     return Object.keys(sessions).length;
+  }
+
+  // ===== Link identity (called when user signs up / logs in) =====
+  function linkIdentity(identityData) {
+    try {
+      var identity = {
+        visitor_id: getVisitorId(),
+        linked_at: new Date().toISOString(),
+        type: identityData.type || 'unknown',
+        email: identityData.email || '',
+        name: identityData.name || '',
+        referral_code: identityData.referral_code || '',
+        affiliate_ref: identityData.affiliate_ref || localStorage.getItem('sh_ref') || '',
+        site: window.location.hostname.replace(/^www\./, '')
+      };
+
+      localStorage.setItem(SH_IDENTITY_KEY, JSON.stringify(identity));
+
+      // Build full graph and save to central S3
+      var graphData = {
+        visitor_id: identity.visitor_id,
+        identity: identity,
+        first_seen: localStorage.getItem(SH_FIRST_SEEN_KEY) || '',
+        last_seen: new Date().toISOString(),
+        visit_count: getVisitHistory().length,
+        visit_history: getVisitHistory().slice(-50),
+        sites_visited: getUniqueSites(),
+        total_sessions: getUniqueSessions(),
+        device: {
+          screen: (screen.width || 0) + 'x' + (screen.height || 0),
+          language: navigator.language || '',
+          platform: navigator.platform || '',
+          touch: 'ontouchstart' in window
+        },
+        _savedAt: new Date().toISOString(),
+        _type: 'identity-graph'
+      };
+
+      saveToS3(graphData);
+      return identity;
+    } catch(e) { return null; }
   }
 
   // ===== Get identity summary =====
@@ -199,25 +244,22 @@
     }
   };
 
-  // ===== INIT: Record this page visit =====
+  // ===== INIT =====
   var visitorId = getVisitorId();
   recordVisit();
 
-  // ===== Auto-link identity when forms are submitted =====
+  // ===== Auto-link identity on form submit =====
   document.addEventListener('submit', function(e) {
     var form = e.target;
     if (!form || form.tagName !== 'FORM') return;
 
-    // Look for email and name fields
     var emailInput = form.querySelector('input[type="email"], input[name="email"], input[name*="email"]');
     var nameInput = form.querySelector('input[name="name"], input[name="first_name"], input[name*="name"]');
 
     if (emailInput && emailInput.value) {
-      // Determine type based on form context
       var type = 'customer';
       if (form.id && form.id.toLowerCase().indexOf('affiliate') >= 0) type = 'affiliate';
       if (form.id && form.id.toLowerCase().indexOf('register') >= 0) type = 'affiliate';
-      if (form.action && form.action.toLowerCase().indexOf('affiliate') >= 0) type = 'affiliate';
 
       var refInput = form.querySelector('input[name="referral_code"]');
 
@@ -231,24 +273,21 @@
     }
   }, true);
 
-  // ===== Patch saveClientData to always include visitor_id =====
+  // ===== Patch saveClientData to include visitor_id =====
   document.addEventListener('DOMContentLoaded', function() {
-    if (window.saveClientData) {
+    if (window.saveClientData && !window._shIdentityPatched) {
+      window._shIdentityPatched = true;
       var _origSave = window.saveClientData;
-      // Only patch if not already patched by identity graph
-      if (!window._shIdentityPatched) {
-        window._shIdentityPatched = true;
-        window.saveClientData = function(data, filename) {
-          if (data && typeof data === 'object') {
-            data._visitor_id = visitorId;
-            data._visit_count = getVisitHistory().length;
-            data._is_returning = getVisitHistory().length > 1;
-            data._first_seen = localStorage.getItem(SH_FIRST_SEEN_KEY) || '';
-            data._sites_visited = Object.keys(getUniqueSites());
-          }
-          return _origSave(data, filename);
-        };
-      }
+      window.saveClientData = function(data, filename) {
+        if (data && typeof data === 'object') {
+          data._visitor_id = visitorId;
+          data._visit_count = getVisitHistory().length;
+          data._is_returning = getVisitHistory().length > 1;
+          data._first_seen = localStorage.getItem(SH_FIRST_SEEN_KEY) || '';
+          data._sites_visited = Object.keys(getUniqueSites());
+        }
+        return _origSave(data, filename);
+      };
     }
   });
 
