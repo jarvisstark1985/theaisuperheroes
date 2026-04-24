@@ -492,6 +492,11 @@
                     <div class="stat-meta">All time</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-label">Referral Clicks</div>
+                    <div class="stat-value" id="totalClicks" style="color:#4ECDC4;">0</div>
+                    <div class="stat-meta">All time</div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-label">Signups Today</div>
                     <div class="stat-value" id="leadsToday">0</div>
                     <div class="stat-meta">Past 24 hours</div>
@@ -512,6 +517,7 @@
             <div style="display:flex;gap:0;margin-bottom:0;">
                 <button id="tabAffiliates" onclick="switchTab('affiliates')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#FF6B35;color:#fff;transition:all .2s;">Affiliates</button>
                 <button id="tabCustomers" onclick="switchTab('customers')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">Paying Customers</button>
+                <button id="tabClicks" onclick="switchTab('clicks')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">Referral Clicks</button>
             </div>
 
             <!-- Affiliates Section -->
@@ -560,6 +566,32 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- Referral Clicks Section -->
+            <div id="sectionClicks" style="display:none;">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="clickSearchInput" placeholder="Search clicks by affiliate code, site, or page...">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Affiliate Code</th>
+                                <th>Landing Site</th>
+                                <th>Page</th>
+                                <th>Referrer</th>
+                                <th>Date/Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clicksTableBody">
+                            <tr><td colspan="5" class="loading"><span class="spinner"></span> Loading referral clicks...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Click Stats by Affiliate -->
+                <h3 class="section-title" style="margin-top:1rem;">Clicks by Affiliate</h3>
+                <div id="clicksByAffiliate" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;"></div>
             </div>
 
             <!-- Sites Overview -->
@@ -643,22 +675,136 @@
             document.getElementById('passwordInput').value = '';
         });
 
+        let clicksData = [];
+
         // Tab switching
         function switchTab(tab) {
             activeTab = tab;
             document.getElementById('sectionAffiliates').style.display = tab === 'affiliates' ? 'block' : 'none';
             document.getElementById('sectionCustomers').style.display = tab === 'customers' ? 'block' : 'none';
+            document.getElementById('sectionClicks').style.display = tab === 'clicks' ? 'block' : 'none';
             document.getElementById('tabAffiliates').style.background = tab === 'affiliates' ? '#FF6B35' : '#1E1E1E';
             document.getElementById('tabAffiliates').style.color = tab === 'affiliates' ? '#fff' : '#888';
             document.getElementById('tabCustomers').style.background = tab === 'customers' ? '#4CAF50' : '#1E1E1E';
             document.getElementById('tabCustomers').style.color = tab === 'customers' ? '#fff' : '#888';
+            document.getElementById('tabClicks').style.background = tab === 'clicks' ? '#4ECDC4' : '#1E1E1E';
+            document.getElementById('tabClicks').style.color = tab === 'clicks' ? '#fff' : '#888';
         }
 
         // Initialize dashboard
         async function initDashboard() {
-            await Promise.all([fetchLeads(), fetchCustomers()]);
+            await Promise.all([fetchLeads(), fetchCustomers(), fetchClicks()]);
             renderSites();
             setupSearch();
+        }
+
+        // Fetch referral clicks from S3
+        async function fetchClicks() {
+            try {
+                AWS.config.region = S3_CONFIG.region;
+                AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                    IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId
+                });
+                await new Promise((resolve, reject) => {
+                    AWS.config.credentials.get(err => err ? reject(err) : resolve());
+                });
+                const s3 = new AWS.S3({ region: S3_CONFIG.region });
+                const listResult = await new Promise((resolve, reject) => {
+                    s3.listObjectsV2({
+                        Bucket: S3_CONFIG.bucket,
+                        Prefix: 'referral-clicks/',
+                        MaxKeys: 1000
+                    }, (err, data) => err ? reject(err) : resolve(data));
+                });
+                const files = (listResult.Contents || []).filter(f => f.Key.endsWith('.json') && !f.Key.includes('_test'));
+                console.log('Found ' + files.length + ' referral click records in S3');
+
+                const records = [];
+                for (const file of files) {
+                    try {
+                        const obj = await new Promise((resolve, reject) => {
+                            s3.getObject({
+                                Bucket: S3_CONFIG.bucket,
+                                Key: file.Key
+                            }, (err, data) => err ? reject(err) : resolve(data));
+                        });
+                        const record = JSON.parse(obj.Body.toString());
+                        if (record._type !== 'referral-click') continue;
+                        records.push(record);
+                    } catch (e) {
+                        console.warn('Failed to read click:', file.Key, e);
+                    }
+                }
+                clicksData = records.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+            } catch (error) {
+                console.warn('Failed to fetch clicks from S3:', error);
+                clicksData = [];
+            }
+            renderClicks();
+        }
+
+        // Render clicks table
+        function renderClicks() {
+            const tbody = document.getElementById('clicksTableBody');
+            const totalEl = document.getElementById('totalClicks');
+            totalEl.textContent = clicksData.length;
+
+            if (clicksData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;padding:2rem;">No referral clicks recorded yet. Clicks will appear here when someone visits a site via an affiliate link (?ref=CODE).</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = clicksData.map(c => {
+                var date = c.timestamp ? new Date(c.timestamp).toLocaleString() : 'N/A';
+                return '<tr>' +
+                    '<td style="color:#FF6B35;font-weight:600;">' + (c.ref_code || 'N/A') + '</td>' +
+                    '<td>' + (c.site || 'N/A') + '</td>' +
+                    '<td>' + (c.page || '/') + '</td>' +
+                    '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (c.referrer || 'Direct') + '</td>' +
+                    '<td>' + date + '</td>' +
+                '</tr>';
+            }).join('');
+
+            // Render clicks by affiliate summary
+            var byAffiliate = {};
+            clicksData.forEach(c => {
+                var code = c.ref_code || 'Unknown';
+                if (!byAffiliate[code]) byAffiliate[code] = { clicks: 0, sites: {} };
+                byAffiliate[code].clicks++;
+                byAffiliate[code].sites[c.site || 'unknown'] = (byAffiliate[code].sites[c.site || 'unknown'] || 0) + 1;
+            });
+
+            var summaryEl = document.getElementById('clicksByAffiliate');
+            summaryEl.innerHTML = Object.keys(byAffiliate).map(code => {
+                var data = byAffiliate[code];
+                var siteList = Object.entries(data.sites).map(([s,c]) => s + ': ' + c).join(', ');
+                return '<div style="background:#141414;border:1px solid #252525;border-radius:10px;padding:1.25rem;">' +
+                    '<div style="color:#FF6B35;font-weight:700;font-size:1.1rem;">' + code + '</div>' +
+                    '<div style="color:#4ECDC4;font-size:1.8rem;font-weight:700;margin:8px 0;">' + data.clicks + '</div>' +
+                    '<div style="color:#888;font-size:0.8rem;">clicks</div>' +
+                    '<div style="color:#666;font-size:0.75rem;margin-top:6px;">' + siteList + '</div>' +
+                '</div>';
+            }).join('');
+
+            // Setup click search
+            document.getElementById('clickSearchInput').addEventListener('input', function() {
+                var q = this.value.toLowerCase();
+                var filtered = clicksData.filter(c =>
+                    (c.ref_code || '').toLowerCase().includes(q) ||
+                    (c.site || '').toLowerCase().includes(q) ||
+                    (c.page || '').toLowerCase().includes(q)
+                );
+                tbody.innerHTML = filtered.map(c => {
+                    var date = c.timestamp ? new Date(c.timestamp).toLocaleString() : 'N/A';
+                    return '<tr>' +
+                        '<td style="color:#FF6B35;font-weight:600;">' + (c.ref_code || 'N/A') + '</td>' +
+                        '<td>' + (c.site || 'N/A') + '</td>' +
+                        '<td>' + (c.page || '/') + '</td>' +
+                        '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (c.referrer || 'Direct') + '</td>' +
+                        '<td>' + date + '</td>' +
+                    '</tr>';
+                }).join('');
+            });
         }
 
         // Fetch affiliate registrations from S3
