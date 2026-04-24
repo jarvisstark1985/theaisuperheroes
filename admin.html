@@ -682,7 +682,7 @@
                     }, (err, data) => err ? reject(err) : resolve(data));
                 });
 
-                const files = (listResult.Contents || []).filter(f => f.Key.endsWith('.json'));
+                const files = (listResult.Contents || []).filter(f => f.Key.endsWith('.json') && !f.Key.includes('_test'));
                 console.log('Found ' + files.length + ' affiliate registrations in S3');
 
                 // Fetch each affiliate record
@@ -696,6 +696,8 @@
                             }, (err, data) => err ? reject(err) : resolve(data));
                         });
                         const record = JSON.parse(obj.Body.toString());
+                        // Skip test/invalid records
+                        if (record._test || record._skip || !record.email || record.status === 'test') continue;
                         records.push({
                             name: record.name || (record.first_name + ' ' + record.last_name) || 'Unknown',
                             email: record.email || '',
