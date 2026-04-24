@@ -620,12 +620,47 @@
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
-<section class="hero" id="heroSection">
+<!-- ===== HERO + INLINE SIGNUP ===== -->
+<section class="hero" id="heroSection" style="padding-bottom:40px;">
   <div class="hero-badge">Ai-Ai Referral Program &mdash; Now Open</div>
   <h1>Earn <span class="accent">80%</span> Commission<br>Promoting AI Tools</h1>
   <p class="subhead">Most affiliate programs pay 10&ndash;15%. We pay <strong>80% on every first payment</strong>. 10 AI products. One referral link. No cap on earnings.</p>
-  <a href="#register" class="hero-cta">Start Earning Now</a>
+
+  <!-- INLINE SIGNUP FORM - First thing visitors see -->
+  <div id="heroRegister" style="max-width:440px;margin:28px auto 0;background:var(--card);border:2px solid var(--orange);border-radius:16px;padding:28px 24px;text-align:left;">
+    <h3 style="color:var(--white);font-size:1.2em;margin-bottom:4px;text-align:center;">Create Your Free Affiliate Account</h3>
+    <p style="color:var(--gray);font-size:0.85em;margin-bottom:18px;text-align:center;">Instant approval. Start earning in 60 seconds.</p>
+
+    <div id="heroAuthMessage" class="msg"></div>
+
+    <form id="heroRegisterForm" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label style="color:var(--gray);font-size:0.85em;margin-bottom:4px;display:block;">First Name *</label>
+        <input type="text" id="regFirstName" required placeholder="First name" style="width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.95em;">
+      </div>
+      <div class="form-group">
+        <label style="color:var(--gray);font-size:0.85em;margin-bottom:4px;display:block;">Email *</label>
+        <input type="email" id="regEmail" required placeholder="you@example.com" style="width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.95em;">
+      </div>
+      <div class="form-group">
+        <label style="color:var(--gray);font-size:0.85em;margin-bottom:4px;display:block;">Password *</label>
+        <input type="password" id="regPassword" required placeholder="Min 8 characters" minlength="8" style="width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.95em;">
+      </div>
+      <div class="form-group">
+        <label style="color:var(--gray);font-size:0.85em;margin-bottom:4px;display:block;">I am a...</label>
+        <select id="regType" style="width:100%;padding:10px 12px;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;font-size:0.95em;">
+          <option value="creator">Creator / Influencer</option>
+          <option value="blogger">Blogger / Publisher</option>
+          <option value="ai_agent">AI Agent / Bot</option>
+          <option value="business">Business / Agency</option>
+          <option value="developer">Developer</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary" id="regBtn" style="width:100%;padding:14px;background:var(--orange);color:#fff;border:none;border-radius:8px;font-size:1.05em;font-weight:700;cursor:pointer;margin-top:4px;">Create Affiliate Account</button>
+    </form>
+
+    <p style="color:#555;font-size:0.75em;text-align:center;margin-top:10px;">Already have an account? <a href="#register" style="color:var(--orange);cursor:pointer;" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'});switchTab('login');return false;">Log in</a></p>
+  </div>
 </section>
 
 <!-- Comparison -->
@@ -880,47 +915,25 @@
 
 </div><!-- end container / marketingContent -->
 
-<!-- ===== REGISTER FORM ===== -->
+<!-- ===== LOGIN / RETURNING AFFILIATES ===== -->
 <div class="register-section" id="register">
-  <div class="section-tag">Get Started</div>
-  <h2>Create Your Affiliate Account</h2>
-  <p style="color:var(--gray); margin-bottom:8px;">Free to join. Instant approval. Start earning in 60 seconds.</p>
+  <div class="section-tag">Returning Affiliates</div>
+  <h2>Log In to Your Dashboard</h2>
+  <p style="color:var(--gray); margin-bottom:8px;">Access your referral links, stats, and earnings.</p>
 
   <div class="auth-container" id="authSection">
     <div class="auth-card">
       <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchTab('register')">Register</button>
-        <button class="auth-tab" onclick="switchTab('login')">Log In</button>
+        <button class="auth-tab" onclick="switchTab('register');document.getElementById('heroSection').scrollIntoView({behavior:'smooth'});">Register</button>
+        <button class="auth-tab active" onclick="switchTab('login')">Log In</button>
       </div>
 
       <div id="authMessage" class="msg"></div>
 
-      <!-- Register Form -->
-      <form id="registerForm" onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label>First Name *</label>
-          <input type="text" id="regFirstName" required placeholder="First name">
-        </div>
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" id="regEmail" required placeholder="you@example.com">
-        </div>
-        <div class="form-group">
-          <label>Password *</label>
-          <input type="password" id="regPassword" required placeholder="Min 8 characters" minlength="8">
-        </div>
-        <div class="form-group">
-          <label>I am a...</label>
-          <select id="regType">
-            <option value="creator">Creator / Influencer</option>
-            <option value="blogger">Blogger / Publisher</option>
-            <option value="ai_agent">AI Agent / Bot</option>
-            <option value="business">Business / Agency</option>
-            <option value="developer">Developer</option>
-          </select>
-        </div>
-        <p style="color:#666;font-size:0.8em;margin-bottom:14px;">You can add phone, address &amp; website later in your profile settings.</p>
-        <button type="submit" class="btn-primary" id="regBtn">Create Affiliate Account</button>
+      <!-- Register redirect (points back to hero form) -->
+      <form id="registerForm" style="display:none;" onsubmit="handleRegister(event)">
+        <p style="color:var(--gray);text-align:center;padding:20px 0;">Use the signup form at the top of the page to create your account.</p>
+        <a href="#heroSection" style="display:block;text-align:center;color:var(--orange);font-weight:600;" onclick="document.getElementById('heroSection').scrollIntoView({behavior:'smooth'});return false;">Go to Signup Form &uarr;</a>
       </form>
 
       <!-- Login Form -->
@@ -1121,8 +1134,8 @@
       type: document.getElementById('regType').value
     };
 
-    // Track registration event
-    gtag('event', 'affiliate_register', { method: 'form' });
+    // Track registration submit attempt
+    gtag('event', 'affiliate_register_submit', { method: 'form' });
 
     try {
       if (USE_MOCK) {
@@ -1149,12 +1162,14 @@
           created_at: new Date().toISOString()
         });
         if (!s3Saved) {
+          gtag('event', 'affiliate_register_fail', { reason: 's3_save_failed' });
           msg.className = 'msg msg-error';
           msg.textContent = 'Registration failed to save. Please try again or contact support.';
           btn.disabled = false;
           btn.textContent = 'Create Affiliate Account';
           return;
         }
+        gtag('event', 'affiliate_register_success', { referral_code: user.referral_code, type: payload.type });
         currentUser = user;
         showDashboard();
       } else {
@@ -1308,6 +1323,42 @@
   }
 
   // ===== UTILITY =====
+  // ===== FUNNEL TRACKING =====
+  // Track: page view → form view → field focus → field complete → submit → success/fail
+  (function() {
+    // Track form visible (it's in the hero now, so immediate)
+    gtag('event', 'affiliate_form_view', { location: 'hero' });
+
+    // Track first field interaction
+    var firstTouch = false;
+    ['regFirstName','regEmail','regPassword','regType'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('focus', function() {
+          if (!firstTouch) {
+            firstTouch = true;
+            gtag('event', 'affiliate_form_start', { first_field: id });
+          }
+          gtag('event', 'affiliate_field_focus', { field: id });
+        });
+        // Track field completion (blur with value)
+        el.addEventListener('blur', function() {
+          if (this.value && this.value.length > 0) {
+            gtag('event', 'affiliate_field_complete', { field: id });
+          }
+        });
+      }
+    });
+
+    // Track button clicks (even if form validation fails)
+    var regBtn = document.getElementById('regBtn');
+    if (regBtn) {
+      regBtn.addEventListener('click', function() {
+        gtag('event', 'affiliate_register_click', { location: 'hero' });
+      });
+    }
+  })();
+
   function generateRefCode(name) {
     var prefix = name.replace(/[^a-zA-Z]/g, '').substring(0, 4).toUpperCase();
     var rand = Math.random().toString(36).substring(2, 6).toUpperCase();
