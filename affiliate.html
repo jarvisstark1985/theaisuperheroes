@@ -1320,6 +1320,9 @@
 
     // Track dashboard view
     gtag('event', 'affiliate_dashboard_view', { referral_code: code });
+
+    // Fetch live stats from S3 (non-blocking)
+    fetchS3Stats(code);
   }
 
   // ===== UTILITY =====
@@ -1384,21 +1387,99 @@
     });
   }
 
+  // ===== FETCH LIVE STATS FROM S3 =====
+  async function fetchS3Stats(refCode) {
+    try {
+      AWS.config.region = S3_CONFIG.region;
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId
+      });
+      await new Promise(function(resolve, reject) {
+        AWS.config.credentials.get(function(err) { err ? reject(err) : resolve(); });
+      });
+      var s3 = new AWS.S3({ region: S3_CONFIG.region });
+
+      // Fetch click count
+      var clickCount = 0;
+      var clickParams = { Bucket: S3_CONFIG.bucket, Prefix: 'referral-clicks/' + refCode };
+      var clickDone = false;
+      while (!clickDone) {
+        var clickResult = await s3.listObjectsV2(clickParams).promise();
+        clickCount += (clickResult.Contents || []).length;
+        if (clickResult.IsTruncated) {
+          clickParams.ContinuationToken = clickResult.NextContinuationToken;
+        } else {
+          clickDone = true;
+        }
+      }
+
+      // Fetch conversions
+      var conversionKeys = [];
+      var convParams = { Bucket: S3_CONFIG.bucket, Prefix: 'referral-conversions/' + refCode };
+      var convDone = false;
+      while (!convDone) {
+        var convResult = await s3.listObjectsV2(convParams).promise();
+        (convResult.Contents || []).forEach(function(obj) { conversionKeys.push(obj.Key); });
+        if (convResult.IsTruncated) {
+          convParams.ContinuationToken = convResult.NextContinuationToken;
+        } else {
+          convDone = true;
+        }
+      }
+
+      var conversions = [];
+      var totalEarnings = 0;
+      for (var i = 0; i < conversionKeys.length; i++) {
+        try {
+          var obj = await s3.getObject({ Bucket: S3_CONFIG.bucket, Key: conversionKeys[i] }).promise();
+          var conv = JSON.parse(obj.Body.toString());
+          var amount = conv.amount || 0;
+          var commission = Math.round(amount * 0.8);
+          totalEarnings += commission;
+          conversions.push({
+            created_at: conv.timestamp || conv._savedAt || new Date().toISOString(),
+            site: conv.site || conv.product || '',
+            product: conv.product || '',
+            amount: amount,
+            commission: commission,
+            status: conv.status || 'pending'
+          });
+        } catch (e) {}
+      }
+
+      currentUser.stats = currentUser.stats || {};
+      currentUser.stats.clicks = clickCount;
+      currentUser.stats.conversions = conversionKeys.length;
+      currentUser.stats.earnings = totalEarnings;
+      currentUser.stats.pending = totalEarnings;
+      currentUser.conversions = conversions;
+      localStorage.setItem('affiliate_session', JSON.stringify(currentUser));
+
+      document.getElementById('statClicks').textContent = clickCount.toLocaleString();
+      document.getElementById('statConversions').textContent = conversionKeys.length;
+      document.getElementById('statEarnings').textContent = '$' + (totalEarnings / 100).toFixed(2);
+      document.getElementById('statPending').textContent = '$' + (totalEarnings / 100).toFixed(2);
+
+      var tbody = document.getElementById('conversionsTable');
+      if (conversions.length > 0) {
+        tbody.innerHTML = conversions.map(function(c) {
+          var date = new Date(c.created_at).toLocaleDateString();
+          var statusClass = 'status-' + (c.status || 'pending');
+          return '<tr><td>' + date + '</td><td>' + (c.site || c.product || '\u2014') + '</td><td>$' + ((c.amount || 0) / 100).toFixed(2) + '</td><td style="color:#FF6B35;font-weight:600;">$' + ((c.commission || 0) / 100).toFixed(2) + '</td><td><span class="status-badge ' + statusClass + '">' + (c.status || 'pending') + '</span></td></tr>';
+        }).join('');
+      }
+      console.log('[AffDashboard] S3 stats: ' + clickCount + ' clicks, ' + conversionKeys.length + ' conversions');
+    } catch (err) {
+      console.error('[AffDashboard] S3 stats failed:', err);
+    }
+  }
+
   async function refreshDashboard() {
     if (!currentUser) return;
-    if (USE_MOCK) { showDashboard(); return; }
-    try {
-      var token = localStorage.getItem('affiliate_token');
-      var res = await fetch(API_BASE + '/dashboard', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      var data = await res.json();
-      if (res.ok) {
-        currentUser = Object.assign({}, currentUser, data);
-        localStorage.setItem('affiliate_session', JSON.stringify(currentUser));
-        showDashboard();
-      }
-    } catch (e) {}
+    showDashboard();
+    if (currentUser.referral_code) {
+      await fetchS3Stats(currentUser.referral_code);
+    }
   }
 
   function requestPayout() {
