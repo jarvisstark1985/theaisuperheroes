@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.theaisuperheroes.com/sitemap.xml
+
+# Updated 2026-04-28T15:37:25.243Z
