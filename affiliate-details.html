@@ -41,21 +41,22 @@
         section h2{font-size:2rem;font-weight:700;margin-bottom:2rem;text-align:center}
         section h3{font-size:1.3rem;font-weight:600;margin-bottom:1.5rem;color:var(--white)}
         .table-container{overflow-x:auto;margin-bottom:2rem}
-        table{width:100%;border-collapse:collapse;background-color:var(--card);border:1px solid var(--card-border);border-radius:8px;overflow:hidden}
-        table thead{background-color:rgba(255,107,53,0.1);border-bottom:2px solid var(--card-border)}
+        table{width:100%;border-collapse:collapse;background-color:#0A0A0A;border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden}
+        table thead{background-color:rgba(255,107,53,0.08);border-bottom:2px solid rgba(255,255,255,0.08)}
         table th{padding:1.25rem;text-align:left;font-weight:600;color:var(--orange);font-size:0.95rem}
-        table td{padding:1.25rem;border-bottom:1px solid var(--card-border);font-size:0.95rem}
+        table td{padding:1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.95rem;color:var(--white)}
         table tbody tr:last-child td{border-bottom:none}
-        table tbody tr:hover{background-color:rgba(255,107,53,0.05)}
+        table tbody tr:hover{background-color:rgba(255,107,53,0.04)}
+        table tbody tr:nth-child(even){background-color:rgba(255,255,255,0.02)}
         .highlight{color:var(--orange);font-weight:600}
-        .info-card{background-color:var(--card);border:1px solid var(--card-border);padding:2rem;border-radius:12px;margin-bottom:2rem}
+        .info-card{background-color:#0F0F0F;border:1px solid rgba(255,255,255,0.08);padding:2rem;border-radius:12px;margin-bottom:2rem}
         .info-card h4{font-size:1.1rem;margin-bottom:1rem;color:var(--orange)}
         .info-card p{color:var(--gray);line-height:1.8}
         .info-card ul{list-style:none;padding-left:0}
         .info-card li{padding-left:1.5rem;margin-bottom:0.75rem;color:var(--gray);position:relative}
         .info-card li:before{content:"\2713";position:absolute;left:0;color:var(--orange);font-weight:700}
         .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-bottom:2rem}
-        .terms{background-color:var(--card);border:1px solid var(--card-border);padding:2rem;border-radius:12px;max-width:900px;margin:0 auto}
+        .terms{background-color:#0F0F0F;border:1px solid rgba(255,255,255,0.08);padding:2rem;border-radius:12px;max-width:900px;margin:0 auto}
         .terms h4{font-size:1.1rem;margin-top:1.5rem;margin-bottom:1rem;color:var(--orange)}
         .terms h4:first-child{margin-top:0}
         .terms p{color:var(--gray);margin-bottom:1rem;line-height:1.8}
@@ -103,7 +104,13 @@
                         <tr><td><strong>Shopify SuperHero</strong></td><td>$14.99</td><td class="highlight">80%</td><td class="highlight">$11.99</td><td>$119.90</td></tr>
                         <tr><td><strong>SEOAi SuperHero</strong></td><td>$19.99</td><td class="highlight">80%</td><td class="highlight">$15.99</td><td>$159.90</td></tr>
                         <tr><td><strong>MCP SuperHero</strong></td><td>$9.99</td><td class="highlight">80%</td><td class="highlight">$7.99</td><td>$79.90</td></tr>
-                        <tr><td colspan="4" style="text-align:right;"><strong>Total: Refer 10 Customers to Each Product</strong></td><td><span class="highlight">$439.60 total earnings</span></td></tr>
+                        <tr><td><strong>StartBiz SuperHero</strong></td><td>$14.99</td><td class="highlight">80%</td><td class="highlight">$11.99</td><td>$119.90</td></tr>
+                        <tr><td><strong>URL SuperHero</strong></td><td>From $9.99/yr</td><td class="highlight">80%</td><td class="highlight">$7.99</td><td>$79.90</td></tr>
+                        <tr><td><strong>Replit SuperHero</strong></td><td>Free Access</td><td style="color:var(--teal);font-weight:600;">Free</td><td style="color:var(--teal);font-weight:600;">Free referral</td><td>—</td></tr>
+                        <tr><td><strong>Claud SuperHero</strong></td><td>Free Access</td><td style="color:var(--teal);font-weight:600;">Free</td><td style="color:var(--teal);font-weight:600;">Free referral</td><td>—</td></tr>
+                        <tr><td><strong>Agentic SuperHero</strong></td><td>Free Access</td><td style="color:var(--teal);font-weight:600;">Free</td><td style="color:var(--teal);font-weight:600;">Free referral</td><td>—</td></tr>
+                        <tr><td><strong>TheAi SuperHeroes Hub</strong></td><td>Hub — All Products</td><td class="highlight">80%</td><td class="highlight">All products</td><td>Unlimited</td></tr>
+                        <tr><td colspan="4" style="text-align:right;"><strong>Total: Refer 10 Customers to Each Paid Product</strong></td><td><span class="highlight">$639.50 total earnings</span></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -151,7 +158,7 @@
                 <h4>Program Eligibility</h4>
                 <p>Anyone can join the TheAi SuperHeroes referral program. No prior experience necessary.</p>
                 <h4>Commission Terms</h4>
-                <p>You earn 80% of the first payment on all four products, one-time per referral. Unlimited referrals allowed with no earnings cap.</p>
+                <p>You earn 80% of the first payment on all paid products, one-time per referral. Unlimited referrals allowed with no earnings cap. Free products help grow your network.</p>
                 <h4>Prohibited Activities</h4>
                 <ol>
                     <li>No spam, unsolicited email, or paid search bidding on branded terms</li>
@@ -181,9 +188,9 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="var(--orange)" stroke="var(--orange)"/></svg>
                     <span>TheAi <span class="brand-italic">SuperHeroes</span></span>
                 </div>
-                <p style="font-size:0.85rem;color:var(--gray);max-width:260px;line-height:1.6;">The complete AI business toolkit. Four products, one mission: AI superpowers for every business.</p>
+                <p style="font-size:0.85rem;color:var(--gray);max-width:260px;line-height:1.6;">The complete AI business toolkit. 10 products, one mission: AI superpowers for every business.</p>
             </div>
-            <div><h4>Products</h4><a href="https://resumesuperhero.com">Resume SuperHero</a><a href="https://shopifysuperhero.com">Shopify SuperHero</a><a href="https://seoaisuperhero.com">SEOAi SuperHero</a><a href="https://mcpsuperhero.com">MCP SuperHero</a></div>
+            <div><h4>Products</h4><a href="https://resumesuperhero.com">Resume SuperHero</a><a href="https://shopifysuperhero.com">Shopify SuperHero</a><a href="https://seoaisuperhero.com">SEOAi SuperHero</a><a href="https://mcpsuperhero.com">MCP SuperHero</a><a href="https://startbizsuperhero.com">StartBiz SuperHero</a><a href="https://urlsuperhero.com">URL SuperHero</a><a href="https://replitsuperhero.com">Replit SuperHero</a><a href="https://claudsuperhero.com">Claud SuperHero</a><a href="https://agenticsuperhero.com">Agentic SuperHero</a></div>
             <div><h4>Company</h4><a href="/">Home</a><a href="/affiliate.html">Referral Program</a><a href="/affiliate-details.html">Referral Details</a></div>
             <div><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="mailto:support@theaisuperheroes.com">Contact Us</a></div>
         </div>
