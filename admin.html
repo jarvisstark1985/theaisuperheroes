@@ -518,6 +518,7 @@
                 <button id="tabAffiliates" onclick="switchTab('affiliates')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#FF6B35;color:#fff;transition:all .2s;">Affiliates</button>
                 <button id="tabCustomers" onclick="switchTab('customers')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">Paying Customers</button>
                 <button id="tabClicks" onclick="switchTab('clicks')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">Referral Clicks</button>
+                <button id="tabSeoLeads" onclick="switchTab('seoleads')" style="flex:1;padding:14px 24px;font-size:15px;font-weight:600;border:none;cursor:pointer;border-radius:8px 8px 0 0;background:#1E1E1E;color:#888;transition:all .2s;">SEO Audit Leads</button>
             </div>
 
             <!-- Affiliates Section -->
@@ -592,6 +593,38 @@
                 <!-- Click Stats by Affiliate -->
                 <h3 class="section-title" style="margin-top:1rem;">Clicks by Affiliate</h3>
                 <div id="clicksByAffiliate" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;"></div>
+            </div>
+
+            <!-- SEO Audit Leads Section -->
+            <div id="sectionSeoLeads" style="display:none;">
+                <div class="stats-row" style="margin-bottom:1.5rem;">
+                    <div class="stat-card"><div class="stat-label">Total SEO Leads</div><div class="stat-value" id="seoLeadTotal" style="color:#6C63FF;">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Unique Emails</div><div class="stat-value" id="seoLeadUnique" style="color:#4ECDC4;">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Today</div><div class="stat-value" id="seoLeadToday" style="color:#FF6B35;">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Top Source</div><div class="stat-value" id="seoLeadTopSource" style="color:#22C55E;font-size:1.2rem;">-</div></div>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="seoLeadSearch" placeholder="Search by name, email, or website...">
+                    <button onclick="fetchSeoLeads()" style="padding:0.75rem 1.5rem;background:#6C63FF;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;">Refresh</button>
+                    <button onclick="exportSeoLeadsCSV()" style="padding:0.75rem 1.5rem;background:transparent;color:#6C63FF;border:1px solid #6C63FF;border-radius:6px;font-weight:600;cursor:pointer;">Export CSV</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortSeoLeads('name')">Name</th>
+                                <th onclick="sortSeoLeads('email')">Email</th>
+                                <th onclick="sortSeoLeads('website')">Website Audited</th>
+                                <th onclick="sortSeoLeads('source')">Source / Referrer</th>
+                                <th onclick="sortSeoLeads('utm')">UTM Campaign</th>
+                                <th onclick="sortSeoLeads('date')">Date &amp; Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seoLeadsBody">
+                            <tr><td colspan="6" class="loading"><span class="spinner"></span> Loading SEO audit leads...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Sites Overview -->
@@ -683,12 +716,16 @@
             document.getElementById('sectionAffiliates').style.display = tab === 'affiliates' ? 'block' : 'none';
             document.getElementById('sectionCustomers').style.display = tab === 'customers' ? 'block' : 'none';
             document.getElementById('sectionClicks').style.display = tab === 'clicks' ? 'block' : 'none';
+            document.getElementById('sectionSeoLeads').style.display = tab === 'seoleads' ? 'block' : 'none';
             document.getElementById('tabAffiliates').style.background = tab === 'affiliates' ? '#FF6B35' : '#1E1E1E';
             document.getElementById('tabAffiliates').style.color = tab === 'affiliates' ? '#fff' : '#888';
             document.getElementById('tabCustomers').style.background = tab === 'customers' ? '#4CAF50' : '#1E1E1E';
             document.getElementById('tabCustomers').style.color = tab === 'customers' ? '#fff' : '#888';
             document.getElementById('tabClicks').style.background = tab === 'clicks' ? '#4ECDC4' : '#1E1E1E';
             document.getElementById('tabClicks').style.color = tab === 'clicks' ? '#fff' : '#888';
+            document.getElementById('tabSeoLeads').style.background = tab === 'seoleads' ? '#6C63FF' : '#1E1E1E';
+            document.getElementById('tabSeoLeads').style.color = tab === 'seoleads' ? '#fff' : '#888';
+            if (tab === 'seoleads' && seoLeadsData.length === 0) fetchSeoLeads();
         }
 
         // Initialize dashboard
@@ -1057,6 +1094,144 @@
             document.getElementById('customerSearchInput').addEventListener('input', (e) => {
                 renderCustomers(e.target.value);
             });
+        }
+
+        // ─── SEO AUDIT LEADS ───
+        let seoLeadsData = [];
+        let seoSortCol = 'date';
+        let seoSortAsc = false;
+
+        async function fetchSeoLeads() {
+            var tbody = document.getElementById('seoLeadsBody');
+            tbody.innerHTML = '<tr><td colspan="6" class="loading"><span class="spinner"></span> Loading SEO audit leads...</td></tr>';
+            try {
+                AWS.config.region = S3_CONFIG.region;
+                AWS.config.credentials = new AWS.CognitoIdentityCredentials({ IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId });
+                await new Promise(function(res, rej) { AWS.config.credentials.get(function(err) { err ? rej(err) : res(); }); });
+                var s3 = new AWS.S3({ region: S3_CONFIG.region });
+                var list = await s3.listObjectsV2({ Bucket: S3_CONFIG.bucket, Prefix: 'leads/' }).promise();
+                if (!list.Contents || list.Contents.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#666;padding:2rem;">No SEO audit leads yet.</td></tr>';
+                    return;
+                }
+                seoLeadsData = [];
+                var fetches = list.Contents.map(function(obj) {
+                    return s3.getObject({ Bucket: S3_CONFIG.bucket, Key: obj.Key }).promise().then(function(data) {
+                        try { var parsed = JSON.parse(data.Body.toString()); parsed._s3Key = obj.Key; seoLeadsData.push(parsed); } catch(e) {}
+                    });
+                });
+                await Promise.all(fetches);
+                seoLeadsData.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+                updateSeoLeadStats();
+                renderSeoLeads(seoLeadsData);
+            } catch (e) {
+                console.error('SEO lead load error:', e);
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#FF4444;padding:2rem;">Error loading leads: ' + e.message + '</td></tr>';
+            }
+        }
+
+        function getSeoSourceLabel(lead) {
+            var utm = lead.utm_source || '';
+            var ref = lead.referrer || 'direct';
+            if (utm) return utm;
+            if (ref === 'direct' || ref === '') return 'Direct';
+            try { return new URL(ref).hostname.replace('www.', ''); } catch(e) { return ref; }
+        }
+
+        function updateSeoLeadStats() {
+            document.getElementById('seoLeadTotal').textContent = seoLeadsData.length;
+            var emails = {};
+            var todayStr = new Date().toISOString().slice(0, 10);
+            var todayCount = 0;
+            var sources = {};
+            seoLeadsData.forEach(function(l) {
+                emails[l.email] = true;
+                if (l.timestamp && l.timestamp.slice(0, 10) === todayStr) todayCount++;
+                var s = getSeoSourceLabel(l);
+                sources[s] = (sources[s] || 0) + 1;
+            });
+            document.getElementById('seoLeadUnique').textContent = Object.keys(emails).length;
+            document.getElementById('seoLeadToday').textContent = todayCount;
+            var topSource = '-', topCount = 0;
+            for (var s in sources) { if (sources[s] > topCount) { topCount = sources[s]; topSource = s; } }
+            document.getElementById('seoLeadTopSource').textContent = topSource;
+        }
+
+        function renderSeoLeads(leads) {
+            var tbody = document.getElementById('seoLeadsBody');
+            if (leads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#666;padding:2rem;">No matching leads found.</td></tr>';
+                return;
+            }
+            var html = '';
+            leads.forEach(function(l) {
+                var name = ((l.firstName || '') + ' ' + (l.lastName || '')).trim();
+                var dt = l.timestamp ? new Date(l.timestamp) : null;
+                var dateStr = dt ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                var srcLabel = getSeoSourceLabel(l);
+                var website = l.website || 'N/A';
+                try { website = new URL(website.startsWith('http') ? website : 'https://' + website).hostname; } catch(e) {}
+                html += '<tr>';
+                html += '<td>' + (name || 'N/A') + '</td>';
+                html += '<td>' + (l.email || 'N/A') + '</td>';
+                html += '<td>' + website + '</td>';
+                html += '<td><span style="background:rgba(108,99,255,0.15);color:#6C63FF;padding:4px 10px;border-radius:4px;font-size:0.85rem;font-weight:600;">' + srcLabel + '</span></td>';
+                html += '<td>' + (l.utm_campaign || '-') + '</td>';
+                html += '<td>' + dateStr + '</td>';
+                html += '</tr>';
+            });
+            tbody.innerHTML = html;
+        }
+
+        // SEO lead search
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchEl = document.getElementById('seoLeadSearch');
+            if (searchEl) {
+                searchEl.addEventListener('input', function() {
+                    var q = this.value.toLowerCase();
+                    if (!q) { renderSeoLeads(seoLeadsData); return; }
+                    var filtered = seoLeadsData.filter(function(l) {
+                        return ((l.firstName || '') + ' ' + (l.lastName || '') + ' ' + (l.email || '') + ' ' + (l.website || '')).toLowerCase().indexOf(q) > -1;
+                    });
+                    renderSeoLeads(filtered);
+                });
+            }
+        });
+
+        function sortSeoLeads(col) {
+            if (seoSortCol === col) { seoSortAsc = !seoSortAsc; } else { seoSortCol = col; seoSortAsc = true; }
+            seoLeadsData.sort(function(a, b) {
+                var va, vb;
+                if (col === 'name') { va = (a.firstName || '') + (a.lastName || ''); vb = (b.firstName || '') + (b.lastName || ''); }
+                else if (col === 'email') { va = a.email || ''; vb = b.email || ''; }
+                else if (col === 'website') { va = a.website || ''; vb = b.website || ''; }
+                else if (col === 'source') { va = getSeoSourceLabel(a); vb = getSeoSourceLabel(b); }
+                else if (col === 'utm') { va = a.utm_campaign || ''; vb = b.utm_campaign || ''; }
+                else { va = a.timestamp || ''; vb = b.timestamp || ''; }
+                if (va < vb) return seoSortAsc ? -1 : 1;
+                if (va > vb) return seoSortAsc ? 1 : -1;
+                return 0;
+            });
+            renderSeoLeads(seoLeadsData);
+        }
+
+        function exportSeoLeadsCSV() {
+            if (seoLeadsData.length === 0) return;
+            var rows = [['Name', 'Email', 'Website', 'Source', 'UTM Source', 'UTM Medium', 'UTM Campaign', 'Referrer', 'Date', 'User Agent']];
+            seoLeadsData.forEach(function(l) {
+                rows.push([
+                    ((l.firstName || '') + ' ' + (l.lastName || '')).trim(),
+                    l.email || '', l.website || '', getSeoSourceLabel(l),
+                    l.utm_source || '', l.utm_medium || '', l.utm_campaign || '',
+                    l.referrer || '', l.timestamp || '', l.userAgent || ''
+                ]);
+            });
+            var csv = rows.map(function(r) { return r.map(function(c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'seo-audit-leads-' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
         }
 
         // Sort table
