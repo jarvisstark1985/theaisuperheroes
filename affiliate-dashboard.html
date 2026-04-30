@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Affiliate Dashboard — The AI SuperHeroes</title>
+<title>Affiliate Dashboard â The AI SuperHeroes</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a1a;--card:#12122a;--border:#1e1e3a;--accent:#6c5ce7;--accent2:#a29bfe;--green:#00b894;--red:#e17055;--text:#e0e0f0;--muted:#8888aa;--gold:#fdcb6e}
@@ -110,7 +110,7 @@ a{color:var(--accent2);text-decoration:none}
 <!-- AUTH SCREEN -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-box">
-    <div class="logo">⚡</div>
+    <div class="logo">â¡</div>
     <h1 id="authTitle">Affiliate Login</h1>
     <p class="subtitle" id="authSubtitle">Sign in to your affiliate dashboard</p>
 
@@ -139,7 +139,7 @@ a{color:var(--accent2);text-decoration:none}
 <div class="dashboard" id="dashboard">
   <div class="topbar">
     <div class="brand">
-      <span class="logo-icon">⚡</span> Affiliate Dashboard
+      <span class="logo-icon">â¡</span> Affiliate Dashboard
     </div>
     <div class="user-info">
       <span class="user-name" id="userName"></span>
@@ -152,17 +152,17 @@ a{color:var(--accent2);text-decoration:none}
     <div class="stats-row">
       <div class="stat-card accent">
         <div class="stat-label">Total Clicks</div>
-        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-value" id="statTotal">â</div>
         <div class="stat-sub">All time</div>
       </div>
       <div class="stat-card green">
         <div class="stat-label">Last 7 Days</div>
-        <div class="stat-value" id="stat7d">—</div>
+        <div class="stat-value" id="stat7d">â</div>
         <div class="stat-sub">Recent activity</div>
       </div>
       <div class="stat-card gold">
         <div class="stat-label">Last 30 Days</div>
-        <div class="stat-value" id="stat30d">—</div>
+        <div class="stat-value" id="stat30d">â</div>
         <div class="stat-sub">Monthly total</div>
       </div>
       <div class="stat-card">
@@ -176,7 +176,7 @@ a{color:var(--accent2);text-decoration:none}
     <div class="ref-code-box">
       <div>
         <div class="ref-label">Your Referral Code</div>
-        <div class="ref-code" id="refCode">—</div>
+        <div class="ref-code" id="refCode">â</div>
       </div>
       <button class="btn-copy" onclick="copyRefCode()" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.85rem">Copy Code</button>
     </div>
@@ -207,24 +207,189 @@ a{color:var(--accent2);text-decoration:none}
 
 <div class="toast" id="toast"></div>
 
+<!-- AWS SDK for S3 access -->
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1600.0.min.js"></script>
 <script>
-// ─── CONFIG ───
-const API_BASE = 'https://seo-backend.replit.app';
+// âââ CONFIG âââ
+const S3_CONFIG = {
+  region: 'us-east-2',
+  cognitoIdentityPoolId: 'us-east-2:662dfd2a-8d86-4ee3-875b-cd55d0acff8d',
+  bucket: 'superhero-clients-theaisuperheroes',
+  affiliatePrefix: 'affiliates/',
+  clickPrefix: 'referral-clicks/',
+  conversionPrefix: 'referral-conversions/'
+};
+
 const SITES = [
-  { key: 'seoai',    name: 'SEOAi SuperHero',    domain: 'seoaisuperhero.com',    tagline: 'Free AI-Powered SEO Audits',        color: '#6c5ce7', desc: 'Get a complete SEO audit of any website in seconds — powered by AI. Fix issues, rank higher, grow faster.' },
+  { key: 'seoai',    name: 'SEOAi SuperHero',    domain: 'seoaisuperhero.com',    tagline: 'Free AI-Powered SEO Audits',        color: '#6c5ce7', desc: 'Get a complete SEO audit of any website in seconds â powered by AI. Fix issues, rank higher, grow faster.' },
   { key: 'resume',   name: 'Resume SuperHero',    domain: 'resumesuperhero.com',   tagline: 'AI Resume Builder',                 color: '#00b894', desc: 'Build an ATS-optimized resume in minutes with AI. Land more interviews, get hired faster.' },
-  { key: 'shopify',  name: 'Shopify SuperHero',   domain: 'shopifysuperhero.com',  tagline: 'AI Agents for Shopify Stores',      color: '#e17055', desc: 'AI agents that run your Shopify store — inventory, pricing, customer service, all automated.' },
+  { key: 'shopify',  name: 'Shopify SuperHero',   domain: 'shopifysuperhero.com',  tagline: 'AI Agents for Shopify Stores',      color: '#e17055', desc: 'AI agents that run your Shopify store â inventory, pricing, customer service, all automated.' },
   { key: 'url',      name: 'URL SuperHero',       domain: 'urlsuperhero.com',      tagline: 'AI Domain Registration & Hosting',  color: '#0984e3', desc: 'Find the perfect domain and get blazing-fast hosting. AI picks the best name for your brand.' },
   { key: 'startbiz', name: 'StartBiz SuperHero',  domain: 'startbizsuperhero.com', tagline: 'Professional Websites for $14.99/mo', color: '#fdcb6e', desc: 'We build your professional website from scratch. Launch your business online for just $14.99/mo.' },
-  { key: 'mcp',      name: 'MCP SuperHero',       domain: 'mcpsuperhero.com',      tagline: 'Connect Everything Instantly',      color: '#a29bfe', desc: 'Connect AI to any tool instantly with MCP. No code needed — plug in and go.' },
-  { key: 'agentic',  name: 'Agentic SuperHero',   domain: 'agenticsuperhero.com',  tagline: 'AI Agents That Work For You',       color: '#ff6b6b', desc: 'Deploy AI agents that handle your tasks 24/7. Email, research, scheduling — fully automated.' }
+  { key: 'mcp',      name: 'MCP SuperHero',       domain: 'mcpsuperhero.com',      tagline: 'Connect Everything Instantly',      color: '#a29bfe', desc: 'Connect AI to any tool instantly with MCP. No code needed â plug in and go.' },
+  { key: 'agentic',  name: 'Agentic SuperHero',   domain: 'agenticsuperhero.com',  tagline: 'AI Agents That Work For You',       color: '#ff6b6b', desc: 'Deploy AI agents that handle your tasks 24/7. Email, research, scheduling â fully automated.' }
 ];
 
-let token = localStorage.getItem('aff_token');
 let profile = null;
 let isSignup = false;
+let s3 = null;
 
-// ─── AUTH ───
+// âââ S3 INIT âââ
+function initS3() {
+  return new Promise((resolve, reject) => {
+    AWS.config.region = S3_CONFIG.region;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: S3_CONFIG.cognitoIdentityPoolId
+    });
+    AWS.config.credentials.get(function(err) {
+      if (err) { reject(err); return; }
+      s3 = new AWS.S3({ region: S3_CONFIG.region });
+      resolve(s3);
+    });
+  });
+}
+
+// âââ CRYPTO: SHA-256 password hashing âââ
+async function hashPassword(password, salt) {
+  const data = new TextEncoder().encode(salt + ':' + password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function generateSalt() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function generateRefCode(name) {
+  const clean = (name || 'user').replace(/[^a-zA-Z]/g, '').substring(0, 4).toUpperCase();
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return clean + rand;
+}
+
+// âââ S3 HELPERS âââ
+function s3Get(key) {
+  return new Promise((resolve, reject) => {
+    s3.getObject({ Bucket: S3_CONFIG.bucket, Key: key }, function(err, data) {
+      if (err) { reject(err); return; }
+      resolve(JSON.parse(data.Body.toString()));
+    });
+  });
+}
+
+function s3Put(key, obj) {
+  return new Promise((resolve, reject) => {
+    s3.putObject({
+      Bucket: S3_CONFIG.bucket,
+      Key: key,
+      Body: JSON.stringify(obj),
+      ContentType: 'application/json'
+    }, function(err) {
+      if (err) { reject(err); return; }
+      resolve();
+    });
+  });
+}
+
+function s3List(prefix) {
+  return new Promise((resolve, reject) => {
+    var allKeys = [];
+    function listPage(marker) {
+      var params = { Bucket: S3_CONFIG.bucket, Prefix: prefix, MaxKeys: 1000 };
+      if (marker) params.Marker = marker;
+      s3.listObjects(params, function(err, data) {
+        if (err) { reject(err); return; }
+        allKeys = allKeys.concat(data.Contents || []);
+        if (data.IsTruncated && data.Contents.length > 0) {
+          listPage(data.Contents[data.Contents.length - 1].Key);
+        } else {
+          resolve(allKeys);
+        }
+      });
+    }
+    listPage(null);
+  });
+}
+
+// âââ AUTH: S3-based signup/login âââ
+function emailToKey(email) {
+  return S3_CONFIG.affiliatePrefix + email.toLowerCase().replace(/[^a-z0-9@._-]/g, '') + '.json';
+}
+
+async function signup(name, email, password) {
+  if (!s3) await initS3();
+  const key = emailToKey(email);
+
+  // Check if already exists
+  try {
+    await s3Get(key);
+    throw new Error('An account with this email already exists. Please sign in.');
+  } catch (e) {
+    if (e.message.includes('already exists')) throw e;
+    // NoSuchKey = good, account doesn't exist yet
+  }
+
+  const salt = generateSalt();
+  const passHash = await hashPassword(password, salt);
+  const refCode = generateRefCode(name);
+
+  const affiliateData = {
+    name: name,
+    email: email.toLowerCase(),
+    ref_code: refCode,
+    password_hash: passHash,
+    salt: salt,
+    created_at: new Date().toISOString(),
+    _type: 'affiliate'
+  };
+
+  await s3Put(key, affiliateData);
+  return affiliateData;
+}
+
+async function login(email, password) {
+  if (!s3) await initS3();
+  const key = emailToKey(email);
+
+  let affiliateData;
+  try {
+    affiliateData = await s3Get(key);
+  } catch (e) {
+    throw new Error('No account found with this email. Please sign up first.');
+  }
+
+  const passHash = await hashPassword(password, affiliateData.salt);
+  if (passHash !== affiliateData.password_hash) {
+    throw new Error('Incorrect password. Please try again.');
+  }
+
+  return affiliateData;
+}
+
+// âââ SESSION: localStorage-based âââ
+function saveSession(affiliateData) {
+  localStorage.setItem('aff_session', JSON.stringify({
+    email: affiliateData.email,
+    name: affiliateData.name,
+    ref_code: affiliateData.ref_code,
+    ts: Date.now()
+  }));
+}
+
+function getSession() {
+  try {
+    const raw = localStorage.getItem('aff_session');
+    if (!raw) return null;
+    const session = JSON.parse(raw);
+    // 30-day expiry
+    if (Date.now() - session.ts > 30 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem('aff_session');
+      return null;
+    }
+    return session;
+  } catch (e) { return null; }
+}
+
+// âââ AUTH UI âââ
 function toggleAuth() {
   isSignup = !isSignup;
   document.getElementById('authTitle').textContent = isSignup ? 'Create Account' : 'Affiliate Login';
@@ -267,18 +432,18 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
   btn.textContent = isSignup ? 'Creating...' : 'Signing in...';
 
   try {
-    const endpoint = isSignup ? '/api/affiliate/signup' : '/api/affiliate/login';
-    const body = isSignup ? { email, password, name } : { email, password };
-    const res = await fetch(API_BASE + endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
-    token = data.token;
-    localStorage.setItem('aff_token', token);
-    showDashboard();
+    let affiliateData;
+    if (isSignup) {
+      if (!name) throw new Error('Please enter your name.');
+      if (password.length < 6) throw new Error('Password must be at least 6 characters.');
+      affiliateData = await signup(name, email, password);
+      showSuccess('Account created! Loading dashboard...');
+    } else {
+      affiliateData = await login(email, password);
+    }
+    saveSession(affiliateData);
+    profile = affiliateData;
+    setTimeout(() => showDashboard(), 500);
   } catch (err) {
     showError(err.message);
   } finally {
@@ -287,63 +452,140 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ─── DASHBOARD ───
+// âââ DASHBOARD âââ
 async function showDashboard() {
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
-  await loadProfile();
-  await loadStats();
+
+  if (!s3) await initS3();
+
+  // Load full profile from S3 if we only have session
+  if (!profile || !profile.ref_code) {
+    const session = getSession();
+    if (session) {
+      try {
+        profile = await s3Get(emailToKey(session.email));
+      } catch (e) {
+        profile = session; // fallback to session data
+      }
+    }
+  }
+
+  document.getElementById('userName').textContent = profile.name || profile.email;
+  document.getElementById('refCode').textContent = profile.ref_code || 'â';
+
   renderSiteCards();
   renderGraphics();
+  loadClickStats();
 }
 
-async function apiFetch(path) {
-  const res = await fetch(API_BASE + path, {
-    headers: { 'Authorization': 'Bearer ' + token }
-  });
-  if (res.status === 401) { logout(); return null; }
-  return res.json();
-}
-
-async function loadProfile() {
+// âââ LOAD CLICK STATS FROM S3 âââ
+async function loadClickStats() {
   try {
-    profile = await apiFetch('/api/affiliate/profile');
-    if (profile) {
-      document.getElementById('userName').textContent = profile.name || profile.email;
-      document.getElementById('refCode').textContent = profile.ref_code || '—';
-    }
-  } catch (e) {
-    console.error('Profile load failed:', e);
-  }
-}
+    if (!s3) await initS3();
+    const refCode = profile.ref_code;
+    if (!refCode) return;
 
-async function loadStats() {
-  try {
-    const stats = await apiFetch('/api/affiliate/stats');
-    if (stats) {
-      document.getElementById('statTotal').textContent = (stats.total_clicks || 0).toLocaleString();
-      document.getElementById('stat7d').textContent = (stats.clicks_7d || 0).toLocaleString();
-      document.getElementById('stat30d').textContent = (stats.clicks_30d || 0).toLocaleString();
-      // Render click table
-      const tbody = document.getElementById('clickTableBody');
-      tbody.innerHTML = '';
-      const bySite = stats.by_site || {};
-      SITES.forEach(s => {
-        const sd = bySite[s.key] || bySite[s.domain] || {};
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong>${s.name}</strong></td>
-          <td>${(sd.total || 0).toLocaleString()}</td>
-          <td>${(sd.last_7d || 0).toLocaleString()}</td>
-          <td>${(sd.last_30d || 0).toLocaleString()}</td>`;
-        tbody.appendChild(tr);
-      });
+    // List all click files for this ref code
+    const allFiles = await s3List(S3_CONFIG.clickPrefix + refCode + '_');
+
+    const now = Date.now();
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+
+    let totalClicks = 0;
+    let clicks7d = 0;
+    let clicks30d = 0;
+    const bySite = {};
+
+    // Initialize site counters
+    SITES.forEach(s => {
+      bySite[s.domain] = { total: 0, last_7d: 0, last_30d: 0 };
+    });
+
+    // We can parse timestamp from filenames: refCode_2026-04-29T12-00-00-000Z_abc123.json
+    for (const file of allFiles) {
+      totalClicks++;
+      // Extract timestamp from key
+      const parts = file.Key.replace(S3_CONFIG.clickPrefix, '').split('_');
+      let clickTime = 0;
+      if (parts.length >= 2) {
+        // Reconstruct ISO timestamp from filename
+        const tsStr = parts[1].replace(/-/g, function(m, offset, str) {
+          // First 10 chars are date (keep hyphens), rest convert back
+          return offset < 10 ? m : ':';
+        });
+        try {
+          // Try to parse â filenames use format: 2026-04-29T12-00-00-000Z
+          const isoStr = parts[1]
+            .replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d+)Z$/, '$1-$2-$3T$4:$5:$6.$7Z');
+          clickTime = new Date(isoStr).getTime();
+        } catch(e) {}
+      }
+      // Use S3 LastModified as fallback
+      if (!clickTime || isNaN(clickTime)) {
+        clickTime = file.LastModified ? new Date(file.LastModified).getTime() : 0;
+      }
+
+      const age = now - clickTime;
+      if (age < sevenDays) clicks7d++;
+      if (age < thirtyDays) clicks30d++;
+
+      // Try to determine site from filename or fetch content
+      // For efficiency, check against known domain patterns in key
+      let matched = false;
+      for (const s of SITES) {
+        const domainShort = s.domain.replace('.com', '');
+        if (file.Key.toLowerCase().includes(domainShort)) {
+          bySite[s.domain].total++;
+          if (age < sevenDays) bySite[s.domain].last_7d++;
+          if (age < thirtyDays) bySite[s.domain].last_30d++;
+          matched = true;
+          break;
+        }
+      }
     }
+
+    // Update UI
+    document.getElementById('statTotal').textContent = totalClicks.toLocaleString();
+    document.getElementById('stat7d').textContent = clicks7d.toLocaleString();
+    document.getElementById('stat30d').textContent = clicks30d.toLocaleString();
+
+    // Update site cards click counts
+    SITES.forEach(s => {
+      const el = document.getElementById('clicks-' + s.key);
+      if (el) {
+        const count = bySite[s.domain].total;
+        el.textContent = count > 0 ? count + ' clicks' : 'No clicks yet';
+      }
+    });
+
+    // Render click table
+    const tbody = document.getElementById('clickTableBody');
+    tbody.innerHTML = '';
+    SITES.forEach(s => {
+      const sd = bySite[s.domain];
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><strong>${s.name}</strong></td>
+        <td>${sd.total.toLocaleString()}</td>
+        <td>${sd.last_7d.toLocaleString()}</td>
+        <td>${sd.last_30d.toLocaleString()}</td>`;
+      tbody.appendChild(tr);
+    });
+
   } catch (e) {
     console.error('Stats load failed:', e);
-    // Show zeros
     document.getElementById('statTotal').textContent = '0';
     document.getElementById('stat7d').textContent = '0';
     document.getElementById('stat30d').textContent = '0';
+    // Still render empty table
+    const tbody = document.getElementById('clickTableBody');
+    tbody.innerHTML = '';
+    SITES.forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><strong>${s.name}</strong></td><td>0</td><td>0</td><td>0</td>`;
+      tbody.appendChild(tr);
+    });
   }
 }
 
@@ -367,7 +609,7 @@ function renderSiteCards() {
   });
 }
 
-// ─── SHAREABLE GRAPHICS ───
+// âââ SHAREABLE GRAPHICS âââ
 function renderGraphics() {
   const container = document.getElementById('graphicCards');
   container.innerHTML = '';
@@ -417,7 +659,7 @@ function drawGraphic(canvasId, site, refCode) {
   // SuperHero bolt
   ctx.font = '60px serif';
   ctx.fillStyle = site.color;
-  ctx.fillText('⚡', 50, 80);
+  ctx.fillText('â¡', 50, 80);
 
   // Site name
   ctx.font = 'bold 52px -apple-system, BlinkMacSystemFont, sans-serif';
@@ -449,7 +691,7 @@ function drawGraphic(canvasId, site, refCode) {
   ctx.fillText('Visit: ' + site.domain + '/?ref=' + refCode, 70, ctaY + 38);
   ctx.font = '22px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.fillStyle = site.color;
-  ctx.fillText('Click the link to get started — it\'s free!', 70, ctaY + 70);
+  ctx.fillText('Click the link to get started â it\'s free!', 70, ctaY + 70);
 
   // Bottom bar
   ctx.fillStyle = '#0a0a1a';
@@ -464,7 +706,7 @@ function drawGraphic(canvasId, site, refCode) {
   ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.fillStyle = site.color;
   ctx.textAlign = 'right';
-  ctx.fillText('Powered by AI ⚡', W - 50, H - 35);
+  ctx.fillText('Powered by AI â¡', W - 50, H - 35);
   ctx.textAlign = 'left';
 }
 
@@ -498,7 +740,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-// ─── ACTIONS ───
+// âââ ACTIONS âââ
 function copyLink(key) {
   const input = document.getElementById('link-' + key);
   navigator.clipboard.writeText(input.value);
@@ -534,9 +776,8 @@ function copyGraphicLink(key) {
 }
 
 function logout() {
-  token = null;
   profile = null;
-  localStorage.removeItem('aff_token');
+  localStorage.removeItem('aff_session');
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('authScreen').style.display = 'flex';
   document.getElementById('inputEmail').value = '';
@@ -551,8 +792,10 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ─── INIT ───
-if (token) {
+// âââ INIT âââ
+const session = getSession();
+if (session) {
+  profile = session;
   showDashboard();
 }
 </script>
