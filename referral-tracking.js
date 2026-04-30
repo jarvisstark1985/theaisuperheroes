@@ -1,5 +1,5 @@
 /**
- * SuperHero Referral Tracking — v3.0
+ * SuperHero Referral Tracking â v3.0
  * Drop this script on ALL 10 SuperHero websites.
  * Captures ?ref=CODE from URL, stores in cookie + localStorage,
  * tracks clicks to S3 + GA4, and exposes code for Stripe checkout.
@@ -116,7 +116,7 @@
     } catch (e) {}
   }
 
-  // ===== Track referral click — saves to S3 + fires GA4 event =====
+  // ===== Track referral click â saves to S3 + fires GA4 event =====
   function trackClick(code) {
     var clickData = {
       ref_code: code,
@@ -141,6 +141,18 @@
 
     // Save click to S3
     saveToS3(S3_CONFIG.clickPrefix, clickData);
+
+    // POST click to affiliate backend
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://seo-backend.replit.app/api/affiliate/track-click', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({
+        ref_code: code,
+        site: clickData.site,
+        referrer_url: clickData.referrer
+      }));
+    } catch(e) {}
 
     // Fire GA4 event
     try {
