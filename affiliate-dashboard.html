@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Dashboard — The AI SuperHeroes</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a1a;--card:#12122a;--border:#1e1e3a;--accent:#6c5ce7;--accent2:#a29bfe;--green:#00b894;--red:#e17055;--text:#e0e0f0;--muted:#8888aa;--gold:#fdcb6e}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+/* AUTH SCREEN */
+.auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.auth-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:420px}
+.auth-box h1{text-align:center;margin-bottom:8px;font-size:1.6rem}
+.auth-box .logo{text-align:center;font-size:2.5rem;margin-bottom:10px}
+.auth-box .subtitle{text-align:center;color:var(--muted);margin-bottom:30px;font-size:.9rem}
+.auth-box label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;margin-top:16px}
+.auth-box input[type="text"],.auth-box input[type="email"],.auth-box input[type="password"]{width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--border);background:#0d0d20;color:var(--text);font-size:.95rem;outline:none;transition:border .2s}
+.auth-box input:focus{border-color:var(--accent)}
+.auth-box .btn-primary{width:100%;padding:13px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;margin-top:24px;transition:opacity .2s}
+.auth-box .btn-primary:hover{opacity:.9}
+.auth-box .toggle-link{text-align:center;margin-top:20px;font-size:.88rem;color:var(--muted)}
+.auth-box .toggle-link span{color:var(--accent2);cursor:pointer}
+.auth-box .toggle-link span:hover{text-decoration:underline}
+.auth-box .error-msg{background:rgba(225,112,85,.15);color:var(--red);border:1px solid rgba(225,112,85,.3);padding:10px 14px;border-radius:8px;font-size:.85rem;margin-top:16px;display:none}
+.auth-box .success-msg{background:rgba(0,184,148,.15);color:var(--green);border:1px solid rgba(0,184,148,.3);padding:10px 14px;border-radius:8px;font-size:.85rem;margin-top:16px;display:none}
+
+/* DASHBOARD */
+.dashboard{display:none}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 30px;display:flex;align-items:center;justify-content:space-between}
+.topbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.1rem}
+.topbar .brand span.logo-icon{font-size:1.5rem}
+.topbar .user-info{display:flex;align-items:center;gap:14px}
+.topbar .user-name{font-size:.9rem;color:var(--muted)}
+.topbar .btn-logout{padding:7px 16px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.8rem;cursor:pointer;transition:all .2s}
+.topbar .btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+.main{max-width:1200px;margin:0 auto;padding:30px 20px}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.stat-card .stat-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-card .stat-value{font-size:1.8rem;font-weight:700}
+.stat-card .stat-sub{font-size:.78rem;color:var(--muted);margin-top:4px}
+.stat-card.accent .stat-value{color:var(--accent2)}
+.stat-card.green .stat-value{color:var(--green)}
+.stat-card.gold .stat-value{color:var(--gold)}
+
+/* REF CODE DISPLAY */
+.ref-code-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ref-code-box .ref-label{font-size:.85rem;color:var(--muted)}
+.ref-code-box .ref-code{font-family:'Courier New',monospace;font-size:1.3rem;font-weight:700;color:var(--gold);background:#1a1a35;padding:8px 16px;border-radius:8px;letter-spacing:2px}
+
+/* SITE LINKS */
+.section-title{font-size:1.15rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.site-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:30px}
+.site-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s}
+.site-card:hover{border-color:var(--accent)}
+.site-card .site-name{font-weight:600;font-size:1rem;margin-bottom:4px}
+.site-card .site-url{font-size:.8rem;color:var(--muted);margin-bottom:12px}
+.site-card .site-clicks{font-size:.85rem;color:var(--green);margin-bottom:12px}
+.site-card .link-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.site-card .link-input{flex:1;padding:9px 12px;border-radius:6px;border:1px solid var(--border);background:#0d0d20;color:var(--accent2);font-size:.82rem;font-family:monospace;outline:none}
+.site-card .btn-copy{padding:9px 14px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:background .2s}
+.site-card .btn-copy:hover{background:#8b5cf6}
+.site-card .btn-copy.copied{background:var(--green)}
+
+/* SHAREABLE GRAPHICS */
+.graphics-section{margin-bottom:30px}
+.graphic-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.graphic-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.graphic-preview{width:100%;aspect-ratio:1200/630;position:relative;overflow:hidden}
+.graphic-preview canvas{width:100%;height:100%;display:block}
+.graphic-actions{padding:16px;display:flex;gap:8px;flex-wrap:wrap}
+.graphic-actions .btn-dl{padding:8px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:.8rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.graphic-actions .btn-dl:hover{border-color:var(--accent);color:var(--accent2)}
+.graphic-actions .btn-dl.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.graphic-actions .btn-dl.primary:hover{background:#8b5cf6}
+
+/* CLICK HISTORY */
+.click-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:30px}
+.click-table{width:100%;border-collapse:collapse}
+.click-table th{text-align:left;padding:14px 16px;font-size:.78rem;text-transform:uppercase;color:var(--muted);letter-spacing:.5px;border-bottom:1px solid var(--border);background:#0f0f25}
+.click-table td{padding:12px 16px;font-size:.88rem;border-bottom:1px solid var(--border)}
+.click-table tr:last-child td{border-bottom:none}
+.click-table .badge{padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;right:30px;background:var(--green);color:#fff;padding:12px 24px;border-radius:8px;font-size:.9rem;font-weight:500;opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none;z-index:1000}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* LOADING */
+.loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .topbar{padding:12px 16px}
+  .main{padding:20px 14px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .site-cards,.graphic-cards{grid-template-columns:1fr}
+  .ref-code-box{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-box">
+    <div class="logo">⚡</div>
+    <h1 id="authTitle">Affiliate Login</h1>
+    <p class="subtitle" id="authSubtitle">Sign in to your affiliate dashboard</p>
+
+    <form id="authForm">
+      <div id="nameField" style="display:none">
+        <label>Full Name</label>
+        <input type="text" id="inputName" placeholder="Your name">
+      </div>
+      <label>Email</label>
+      <input type="email" id="inputEmail" placeholder="you@example.com" required>
+      <label>Password</label>
+      <input type="password" id="inputPassword" placeholder="Enter password" required>
+      <button type="submit" class="btn-primary" id="authBtn">Sign In</button>
+    </form>
+
+    <div class="error-msg" id="authError"></div>
+    <div class="success-msg" id="authSuccess"></div>
+
+    <p class="toggle-link" id="authToggle">
+      Don't have an account? <span onclick="toggleAuth()">Sign up</span>
+    </p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="topbar">
+    <div class="brand">
+      <span class="logo-icon">⚡</span> Affiliate Dashboard
+    </div>
+    <div class="user-info">
+      <span class="user-name" id="userName"></span>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card accent">
+        <div class="stat-label">Total Clicks</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Last 7 Days</div>
+        <div class="stat-value" id="stat7d">—</div>
+        <div class="stat-sub">Recent activity</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Last 30 Days</div>
+        <div class="stat-value" id="stat30d">—</div>
+        <div class="stat-sub">Monthly total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Sites</div>
+        <div class="stat-value" id="statSites">7</div>
+        <div class="stat-sub">SuperHero network</div>
+      </div>
+    </div>
+
+    <!-- Ref Code -->
+    <div class="ref-code-box">
+      <div>
+        <div class="ref-label">Your Referral Code</div>
+        <div class="ref-code" id="refCode">—</div>
+      </div>
+      <button class="btn-copy" onclick="copyRefCode()" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.85rem">Copy Code</button>
+    </div>
+
+    <!-- Affiliate Links -->
+    <div class="section-title">Your Affiliate Links</div>
+    <div class="site-cards" id="siteCards"></div>
+
+    <!-- Shareable Graphics -->
+    <div class="graphics-section">
+      <div class="section-title">Shareable Graphics</div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">Download branded graphics with your affiliate link baked in. Share on social media, email, or anywhere.</p>
+      <div class="graphic-cards" id="graphicCards"></div>
+    </div>
+
+    <!-- Click History by Site -->
+    <div class="section-title">Clicks by Site</div>
+    <div class="click-table-wrap">
+      <table class="click-table">
+        <thead>
+          <tr><th>Site</th><th>Total Clicks</th><th>Last 7 Days</th><th>Last 30 Days</th></tr>
+        </thead>
+        <tbody id="clickTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───
+const API_BASE = 'https://seo-backend.replit.app';
+const SITES = [
+  { key: 'seoai',    name: 'SEOAi SuperHero',    domain: 'seoaisuperhero.com',    tagline: 'Free AI-Powered SEO Audits',        color: '#6c5ce7', desc: 'Get a complete SEO audit of any website in seconds — powered by AI. Fix issues, rank higher, grow faster.' },
+  { key: 'resume',   name: 'Resume SuperHero',    domain: 'resumesuperhero.com',   tagline: 'AI Resume Builder',                 color: '#00b894', desc: 'Build an ATS-optimized resume in minutes with AI. Land more interviews, get hired faster.' },
+  { key: 'shopify',  name: 'Shopify SuperHero',   domain: 'shopifysuperhero.com',  tagline: 'AI Agents for Shopify Stores',      color: '#e17055', desc: 'AI agents that run your Shopify store — inventory, pricing, customer service, all automated.' },
+  { key: 'url',      name: 'URL SuperHero',       domain: 'urlsuperhero.com',      tagline: 'AI Domain Registration & Hosting',  color: '#0984e3', desc: 'Find the perfect domain and get blazing-fast hosting. AI picks the best name for your brand.' },
+  { key: 'startbiz', name: 'StartBiz SuperHero',  domain: 'startbizsuperhero.com', tagline: 'Professional Websites for $14.99/mo', color: '#fdcb6e', desc: 'We build your professional website from scratch. Launch your business online for just $14.99/mo.' },
+  { key: 'mcp',      name: 'MCP SuperHero',       domain: 'mcpsuperhero.com',      tagline: 'Connect Everything Instantly',      color: '#a29bfe', desc: 'Connect AI to any tool instantly with MCP. No code needed — plug in and go.' },
+  { key: 'agentic',  name: 'Agentic SuperHero',   domain: 'agenticsuperhero.com',  tagline: 'AI Agents That Work For You',       color: '#ff6b6b', desc: 'Deploy AI agents that handle your tasks 24/7. Email, research, scheduling — fully automated.' }
+];
+
+let token = localStorage.getItem('aff_token');
+let profile = null;
+let isSignup = false;
+
+// ─── AUTH ───
+function toggleAuth() {
+  isSignup = !isSignup;
+  document.getElementById('authTitle').textContent = isSignup ? 'Create Account' : 'Affiliate Login';
+  document.getElementById('authSubtitle').textContent = isSignup ? 'Join the SuperHero affiliate program' : 'Sign in to your affiliate dashboard';
+  document.getElementById('nameField').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('authBtn').textContent = isSignup ? 'Create Account' : 'Sign In';
+  document.getElementById('authToggle').innerHTML = isSignup
+    ? 'Already have an account? <span onclick="toggleAuth()">Sign in</span>'
+    : 'Don\'t have an account? <span onclick="toggleAuth()">Sign up</span>';
+  hideMessages();
+}
+
+function hideMessages() {
+  document.getElementById('authError').style.display = 'none';
+  document.getElementById('authSuccess').style.display = 'none';
+}
+
+function showError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('authSuccess').style.display = 'none';
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById('authSuccess');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('authError').style.display = 'none';
+}
+
+document.getElementById('authForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideMessages();
+  const email = document.getElementById('inputEmail').value.trim();
+  const password = document.getElementById('inputPassword').value;
+  const name = document.getElementById('inputName').value.trim();
+  const btn = document.getElementById('authBtn');
+  btn.disabled = true;
+  btn.textContent = isSignup ? 'Creating...' : 'Signing in...';
+
+  try {
+    const endpoint = isSignup ? '/api/affiliate/signup' : '/api/affiliate/login';
+    const body = isSignup ? { email, password, name } : { email, password };
+    const res = await fetch(API_BASE + endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+    token = data.token;
+    localStorage.setItem('aff_token', token);
+    showDashboard();
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = isSignup ? 'Create Account' : 'Sign In';
+  }
+});
+
+// ─── DASHBOARD ───
+async function showDashboard() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  await loadProfile();
+  await loadStats();
+  renderSiteCards();
+  renderGraphics();
+}
+
+async function apiFetch(path) {
+  const res = await fetch(API_BASE + path, {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  if (res.status === 401) { logout(); return null; }
+  return res.json();
+}
+
+async function loadProfile() {
+  try {
+    profile = await apiFetch('/api/affiliate/profile');
+    if (profile) {
+      document.getElementById('userName').textContent = profile.name || profile.email;
+      document.getElementById('refCode').textContent = profile.ref_code || '—';
+    }
+  } catch (e) {
+    console.error('Profile load failed:', e);
+  }
+}
+
+async function loadStats() {
+  try {
+    const stats = await apiFetch('/api/affiliate/stats');
+    if (stats) {
+      document.getElementById('statTotal').textContent = (stats.total_clicks || 0).toLocaleString();
+      document.getElementById('stat7d').textContent = (stats.clicks_7d || 0).toLocaleString();
+      document.getElementById('stat30d').textContent = (stats.clicks_30d || 0).toLocaleString();
+      // Render click table
+      const tbody = document.getElementById('clickTableBody');
+      tbody.innerHTML = '';
+      const bySite = stats.by_site || {};
+      SITES.forEach(s => {
+        const sd = bySite[s.key] || bySite[s.domain] || {};
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><strong>${s.name}</strong></td>
+          <td>${(sd.total || 0).toLocaleString()}</td>
+          <td>${(sd.last_7d || 0).toLocaleString()}</td>
+          <td>${(sd.last_30d || 0).toLocaleString()}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+  } catch (e) {
+    console.error('Stats load failed:', e);
+    // Show zeros
+    document.getElementById('statTotal').textContent = '0';
+    document.getElementById('stat7d').textContent = '0';
+    document.getElementById('stat30d').textContent = '0';
+  }
+}
+
+function renderSiteCards() {
+  const container = document.getElementById('siteCards');
+  container.innerHTML = '';
+  const refCode = profile?.ref_code || 'XXXX';
+  SITES.forEach(s => {
+    const link = `https://${s.domain}/?ref=${refCode}`;
+    const div = document.createElement('div');
+    div.className = 'site-card';
+    div.innerHTML = `
+      <div class="site-name" style="color:${s.color}">${s.name}</div>
+      <div class="site-url">${s.domain}</div>
+      <div class="site-clicks" id="clicks-${s.key}">Loading clicks...</div>
+      <div class="link-row">
+        <input class="link-input" value="${link}" readonly id="link-${s.key}">
+        <button class="btn-copy" onclick="copyLink('${s.key}')">Copy</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+// ─── SHAREABLE GRAPHICS ───
+function renderGraphics() {
+  const container = document.getElementById('graphicCards');
+  container.innerHTML = '';
+  const refCode = profile?.ref_code || 'XXXX';
+
+  SITES.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'graphic-card';
+    const canvasId = `canvas-${s.key}`;
+    div.innerHTML = `
+      <div class="graphic-preview"><canvas id="${canvasId}" width="1200" height="630"></canvas></div>
+      <div class="graphic-actions">
+        <button class="btn-dl primary" onclick="downloadGraphic('${s.key}')">Download PNG</button>
+        <button class="btn-dl" onclick="copyGraphicLink('${s.key}')">Copy Link</button>
+      </div>`;
+    container.appendChild(div);
+    setTimeout(() => drawGraphic(canvasId, s, refCode), 50);
+  });
+}
+
+function drawGraphic(canvasId, site, refCode) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 1200, H = 630;
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, '#0a0a1a');
+  grad.addColorStop(0.5, site.color + '33');
+  grad.addColorStop(1, '#0a0a1a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Decorative circles
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = site.color;
+  ctx.beginPath(); ctx.arc(950, 120, 200, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(200, 500, 150, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Border accent
+  ctx.strokeStyle = site.color;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(2, 2, W - 4, H - 4);
+
+  // SuperHero bolt
+  ctx.font = '60px serif';
+  ctx.fillStyle = site.color;
+  ctx.fillText('⚡', 50, 80);
+
+  // Site name
+  ctx.font = 'bold 52px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(site.name, 130, 80);
+
+  // Tagline
+  ctx.font = 'bold 38px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = site.color;
+  ctx.fillText(site.tagline, 50, 160);
+
+  // Description
+  ctx.font = '26px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = '#c0c0d0';
+  wrapText(ctx, site.desc, 50, 220, W - 100, 36);
+
+  // CTA box
+  const ctaY = 380;
+  ctx.fillStyle = site.color + '22';
+  roundRect(ctx, 40, ctaY, W - 80, 90, 16);
+  ctx.fill();
+  ctx.strokeStyle = site.color + '66';
+  ctx.lineWidth = 2;
+  roundRect(ctx, 40, ctaY, W - 80, 90, 16);
+  ctx.stroke();
+
+  ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('Visit: ' + site.domain + '/?ref=' + refCode, 70, ctaY + 38);
+  ctx.font = '22px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = site.color;
+  ctx.fillText('Click the link to get started — it\'s free!', 70, ctaY + 70);
+
+  // Bottom bar
+  ctx.fillStyle = '#0a0a1a';
+  ctx.fillRect(0, H - 80, W, 80);
+  ctx.fillStyle = site.color;
+  ctx.fillRect(0, H - 80, W, 3);
+
+  ctx.font = '20px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = '#8888aa';
+  ctx.fillText('The AI SuperHeroes Network  |  theaisuperheroes.com', 50, H - 35);
+
+  ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillStyle = site.color;
+  ctx.textAlign = 'right';
+  ctx.fillText('Powered by AI ⚡', W - 50, H - 35);
+  ctx.textAlign = 'left';
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  for (const word of words) {
+    const test = line + word + ' ';
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, y);
+      line = word + ' ';
+      y += lineH;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// ─── ACTIONS ───
+function copyLink(key) {
+  const input = document.getElementById('link-' + key);
+  navigator.clipboard.writeText(input.value);
+  const btn = input.nextElementSibling;
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  showToast('Affiliate link copied!');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+}
+
+function copyRefCode() {
+  const code = document.getElementById('refCode').textContent;
+  navigator.clipboard.writeText(code);
+  showToast('Referral code copied!');
+}
+
+function downloadGraphic(key) {
+  const canvas = document.getElementById('canvas-' + key);
+  const site = SITES.find(s => s.key === key);
+  const link = document.createElement('a');
+  link.download = `${site.domain}-affiliate-graphic.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast('Graphic downloaded!');
+}
+
+function copyGraphicLink(key) {
+  const site = SITES.find(s => s.key === key);
+  const refCode = profile?.ref_code || 'XXXX';
+  const link = `https://${site.domain}/?ref=${refCode}`;
+  navigator.clipboard.writeText(link);
+  showToast('Link copied!');
+}
+
+function logout() {
+  token = null;
+  profile = null;
+  localStorage.removeItem('aff_token');
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('inputEmail').value = '';
+  document.getElementById('inputPassword').value = '';
+  hideMessages();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── INIT ───
+if (token) {
+  showDashboard();
+}
+</script>
+</body>
+</html>
