@@ -110,7 +110,7 @@ a{color:var(--accent2);text-decoration:none}
 <!-- AUTH SCREEN -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-box">
-    <div class="logo">â¡</div>
+    <div class="logo">&#9889;</div>
     <h1 id="authTitle">Affiliate Login</h1>
     <p class="subtitle" id="authSubtitle">Sign in to your affiliate dashboard</p>
 
@@ -139,7 +139,7 @@ a{color:var(--accent2);text-decoration:none}
 <div class="dashboard" id="dashboard">
   <div class="topbar">
     <div class="brand">
-      <span class="logo-icon">â¡</span> Affiliate Dashboard
+      <span class="logo-icon">&#9889;</span> Affiliate Dashboard
     </div>
     <div class="user-info">
       <span class="user-name" id="userName"></span>
@@ -152,17 +152,17 @@ a{color:var(--accent2);text-decoration:none}
     <div class="stats-row">
       <div class="stat-card accent">
         <div class="stat-label">Total Clicks</div>
-        <div class="stat-value" id="statTotal">â</div>
+        <div class="stat-value" id="statTotal">&mdash;</div>
         <div class="stat-sub">All time</div>
       </div>
       <div class="stat-card green">
         <div class="stat-label">Last 7 Days</div>
-        <div class="stat-value" id="stat7d">â</div>
+        <div class="stat-value" id="stat7d">&mdash;</div>
         <div class="stat-sub">Recent activity</div>
       </div>
       <div class="stat-card gold">
         <div class="stat-label">Last 30 Days</div>
-        <div class="stat-value" id="stat30d">â</div>
+        <div class="stat-value" id="stat30d">&mdash;</div>
         <div class="stat-sub">Monthly total</div>
       </div>
       <div class="stat-card">
@@ -176,7 +176,7 @@ a{color:var(--accent2);text-decoration:none}
     <div class="ref-code-box">
       <div>
         <div class="ref-label">Your Referral Code</div>
-        <div class="ref-code" id="refCode">â</div>
+        <div class="ref-code" id="refCode">&mdash;</div>
       </div>
       <button class="btn-copy" onclick="copyRefCode()" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.85rem">Copy Code</button>
     </div>
@@ -210,7 +210,7 @@ a{color:var(--accent2);text-decoration:none}
 <!-- AWS SDK for S3 access -->
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1600.0.min.js"></script>
 <script>
-// âââ CONFIG âââ
+// --- CONFIG ---
 const S3_CONFIG = {
   region: 'us-east-2',
   cognitoIdentityPoolId: 'us-east-2:662dfd2a-8d86-4ee3-875b-cd55d0acff8d',
@@ -221,20 +221,20 @@ const S3_CONFIG = {
 };
 
 const SITES = [
-  { key: 'seoai',    name: 'SEOAi SuperHero',    domain: 'seoaisuperhero.com',    tagline: 'Free AI-Powered SEO Audits',        color: '#6c5ce7', desc: 'Get a complete SEO audit of any website in seconds â powered by AI. Fix issues, rank higher, grow faster.' },
+  { key: 'seoai',    name: 'SEOAi SuperHero',    domain: 'seoaisuperhero.com',    tagline: 'Free AI-Powered SEO Audits',        color: '#6c5ce7', desc: 'Get a complete SEO audit of any website in seconds &mdash; powered by AI. Fix issues, rank higher, grow faster.' },
   { key: 'resume',   name: 'Resume SuperHero',    domain: 'resumesuperhero.com',   tagline: 'AI Resume Builder',                 color: '#00b894', desc: 'Build an ATS-optimized resume in minutes with AI. Land more interviews, get hired faster.' },
-  { key: 'shopify',  name: 'Shopify SuperHero',   domain: 'shopifysuperhero.com',  tagline: 'AI Agents for Shopify Stores',      color: '#e17055', desc: 'AI agents that run your Shopify store â inventory, pricing, customer service, all automated.' },
+  { key: 'shopify',  name: 'Shopify SuperHero',   domain: 'shopifysuperhero.com',  tagline: 'AI Agents for Shopify Stores',      color: '#e17055', desc: 'AI agents that run your Shopify store &mdash; inventory, pricing, customer service, all automated.' },
   { key: 'url',      name: 'URL SuperHero',       domain: 'urlsuperhero.com',      tagline: 'AI Domain Registration & Hosting',  color: '#0984e3', desc: 'Find the perfect domain and get blazing-fast hosting. AI picks the best name for your brand.' },
   { key: 'startbiz', name: 'StartBiz SuperHero',  domain: 'startbizsuperhero.com', tagline: 'Professional Websites for $14.99/mo', color: '#fdcb6e', desc: 'We build your professional website from scratch. Launch your business online for just $14.99/mo.' },
-  { key: 'mcp',      name: 'MCP SuperHero',       domain: 'mcpsuperhero.com',      tagline: 'Connect Everything Instantly',      color: '#a29bfe', desc: 'Connect AI to any tool instantly with MCP. No code needed â plug in and go.' },
-  { key: 'agentic',  name: 'Agentic SuperHero',   domain: 'agenticsuperhero.com',  tagline: 'AI Agents That Work For You',       color: '#ff6b6b', desc: 'Deploy AI agents that handle your tasks 24/7. Email, research, scheduling â fully automated.' }
+  { key: 'mcp',      name: 'MCP SuperHero',       domain: 'mcpsuperhero.com',      tagline: 'Connect Everything Instantly',      color: '#a29bfe', desc: 'Connect AI to any tool instantly with MCP. No code needed &mdash; plug in and go.' },
+  { key: 'agentic',  name: 'Agentic SuperHero',   domain: 'agenticsuperhero.com',  tagline: 'AI Agents That Work For You',       color: '#ff6b6b', desc: 'Deploy AI agents that handle your tasks 24/7. Email, research, scheduling &mdash; fully automated.' }
 ];
 
 let profile = null;
 let isSignup = false;
 let s3 = null;
 
-// âââ S3 INIT âââ
+// --- S3 INIT ---
 function initS3() {
   return new Promise((resolve, reject) => {
     AWS.config.region = S3_CONFIG.region;
@@ -249,7 +249,7 @@ function initS3() {
   });
 }
 
-// âââ CRYPTO: SHA-256 password hashing âââ
+// --- CRYPTO: SHA-256 password hashing ---
 async function hashPassword(password, salt) {
   const data = new TextEncoder().encode(salt + ':' + password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -266,7 +266,7 @@ function generateRefCode(name) {
   return clean + rand;
 }
 
-// âââ S3 HELPERS âââ
+// --- S3 HELPERS ---
 function s3Get(key) {
   return new Promise((resolve, reject) => {
     s3.getObject({ Bucket: S3_CONFIG.bucket, Key: key }, function(err, data) {
@@ -310,7 +310,7 @@ function s3List(prefix) {
   });
 }
 
-// âââ AUTH: S3-based signup/login âââ
+// --- AUTH: S3-based signup/login ---
 function emailToKey(email) {
   return S3_CONFIG.affiliatePrefix + email.toLowerCase().replace(/[^a-z0-9@._-]/g, '') + '.json';
 }
@@ -365,7 +365,7 @@ async function login(email, password) {
   return affiliateData;
 }
 
-// âââ SESSION: localStorage-based âââ
+// --- SESSION: localStorage-based ---
 function saveSession(affiliateData) {
   localStorage.setItem('aff_session', JSON.stringify({
     email: affiliateData.email,
@@ -389,7 +389,7 @@ function getSession() {
   } catch (e) { return null; }
 }
 
-// âââ AUTH UI âââ
+// --- AUTH UI ---
 function toggleAuth() {
   isSignup = !isSignup;
   document.getElementById('authTitle').textContent = isSignup ? 'Create Account' : 'Affiliate Login';
@@ -452,7 +452,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
   }
 });
 
-// âââ DASHBOARD âââ
+// --- DASHBOARD ---
 async function showDashboard() {
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
@@ -472,14 +472,14 @@ async function showDashboard() {
   }
 
   document.getElementById('userName').textContent = profile.name || profile.email;
-  document.getElementById('refCode').textContent = profile.ref_code || 'â';
+  document.getElementById('refCode').textContent = profile.ref_code || '&mdash;';
 
   renderSiteCards();
   renderGraphics();
   loadClickStats();
 }
 
-// âââ LOAD CLICK STATS FROM S3 âââ
+// --- LOAD CLICK STATS FROM S3 ---
 async function loadClickStats() {
   try {
     if (!s3) await initS3();
@@ -516,7 +516,7 @@ async function loadClickStats() {
           return offset < 10 ? m : ':';
         });
         try {
-          // Try to parse â filenames use format: 2026-04-29T12-00-00-000Z
+          // Try to parse &mdash; filenames use format: 2026-04-29T12-00-00-000Z
           const isoStr = parts[1]
             .replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d+)Z$/, '$1-$2-$3T$4:$5:$6.$7Z');
           clickTime = new Date(isoStr).getTime();
@@ -609,7 +609,7 @@ function renderSiteCards() {
   });
 }
 
-// âââ SHAREABLE GRAPHICS âââ
+// --- SHAREABLE GRAPHICS ---
 function renderGraphics() {
   const container = document.getElementById('graphicCards');
   container.innerHTML = '';
@@ -659,7 +659,7 @@ function drawGraphic(canvasId, site, refCode) {
   // SuperHero bolt
   ctx.font = '60px serif';
   ctx.fillStyle = site.color;
-  ctx.fillText('â¡', 50, 80);
+  ctx.fillText('&#9889;', 50, 80);
 
   // Site name
   ctx.font = 'bold 52px -apple-system, BlinkMacSystemFont, sans-serif';
@@ -691,7 +691,7 @@ function drawGraphic(canvasId, site, refCode) {
   ctx.fillText('Visit: ' + site.domain + '/?ref=' + refCode, 70, ctaY + 38);
   ctx.font = '22px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.fillStyle = site.color;
-  ctx.fillText('Click the link to get started â it\'s free!', 70, ctaY + 70);
+  ctx.fillText('Click the link to get started &mdash; it\'s free!', 70, ctaY + 70);
 
   // Bottom bar
   ctx.fillStyle = '#0a0a1a';
@@ -706,7 +706,7 @@ function drawGraphic(canvasId, site, refCode) {
   ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, sans-serif';
   ctx.fillStyle = site.color;
   ctx.textAlign = 'right';
-  ctx.fillText('Powered by AI â¡', W - 50, H - 35);
+  ctx.fillText('Powered by AI &#9889;', W - 50, H - 35);
   ctx.textAlign = 'left';
 }
 
@@ -740,7 +740,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-// âââ ACTIONS âââ
+// --- ACTIONS ---
 function copyLink(key) {
   const input = document.getElementById('link-' + key);
   navigator.clipboard.writeText(input.value);
@@ -792,7 +792,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// âââ INIT âââ
+// --- INIT ---
 const session = getSession();
 if (session) {
   profile = session;
